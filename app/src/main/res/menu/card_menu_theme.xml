@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/culture_art"
+        android:icon="@drawable/ic_action_point"
+        android:title="Culture and Art" />
+    <item
+        android:id="@+id/modern_technologies"
+        android:icon="@drawable/ic_action_point"
+        android:title="Modern technologies" />
+    <item
+        android:id="@+id/society_politics"
+        android:icon="@drawable/ic_action_point"
+        android:title="Society and Politics" />
+    <item
+        android:id="@+id/adventure_travel"
+        android:icon="@drawable/ic_action_point"
+        android:title="Adventure travel" />
+
+    <item
+        android:id="@+id/nature_weather"
+        android:icon="@drawable/ic_action_point"
+        android:title="Nature and Weather" />
+
+    <item
+        android:id="@+id/education_profession"
+        android:icon="@drawable/ic_action_point"
+        android:title="Education and Profession" />
+    <item
+        android:id="@+id/appearance_character"
+        android:icon="@drawable/ic_action_point"
+        android:title="Appearance and Character" />
+    <item
+        android:id="@+id/clothes_fashion"
+        android:icon="@drawable/ic_action_point"
+        android:title="Clothes and Fashion" />
+    <item
+        android:id="@+id/sport"
+        android:icon="@drawable/ic_action_point"
+        android:title="Sport" />
+
+    <item
+        android:id="@+id/family_relationship"
+        android:icon="@drawable/ic_action_point"
+        android:title="Family and Relationship" />
+
+    <item
+        android:id="@+id/order_of_day"
+        android:icon="@drawable/ic_action_point"
+        android:title="The order of the day" />
+
+    <item
+        android:id="@+id/hobbies_free_time"
+        android:icon="@drawable/ic_action_point"
+        android:title="Hobbies and Free time" />
+
+    <item
+        android:id="@+id/customs_traditions"
+        android:icon="@drawable/ic_action_point"
+        android:title="Customs and Traditions" />
+
+    <item
+        android:id="@+id/shopping"
+        android:icon="@drawable/ic_action_point"
+        android:title="Shopping" />
+
+    <item
+        android:id="@+id/food_drinks"
+        android:icon="@drawable/ic_action_point"
+        android:title="Food and Drinks" />
+</menu>

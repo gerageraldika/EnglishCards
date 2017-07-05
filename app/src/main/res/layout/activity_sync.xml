@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/colorPrimary"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="LANGUAGE CARDS"
+            android:layout_gravity="center"
+            android:id="@+id/sync_cards"
+            android:textSize="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/sync_cards_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/sync_cards_text"
+            android:textColor="@color/colorWhite"
+            android:textSize="18dp" />
+
+        <Button android:id="@+id/action_sync_offline_cards"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/action_sync_offline_cards"
+            android:textStyle="bold"
+            android:textColor="@color/colorWhite"
+            android:background="@color/colorDeepGreen" />
+
+        <ProgressBar android:id="@+id/sync_cards_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="bottom|center_horizontal">
+
+        <TextView
+            android:id="@+id/return_main_from_update_act"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:text="@string/to_main_activity"
+            android:textColor="@color/colorWhite" />
+
+    </LinearLayout>
+
+</LinearLayout>

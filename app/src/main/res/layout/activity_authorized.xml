@@ -1,0 +1,128 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".LoginActivity">
+
+    <LinearLayout
+        android:id="@+id/ll1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center_vertical|center_horizontal">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LANGUAGE CARDS"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorWhite"
+            android:textSize="30dp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.3"
+        android:gravity="center_vertical|center_horizontal">
+
+        <ProgressBar
+            android:id="@+id/login_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <ScrollView
+            android:id="@+id/login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/email_login_form"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+                        android:hint="@string/authorized_person"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorWhite"
+                        android:textColorHint="@color/colorWhite" />
+
+                    <Button
+                        android:id="@+id/log_out_button"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/colorDeepGreen"
+                        android:text="@string/exit"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/forget_data"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/colorDeepGreen"
+                        android:text="@string/forget_passw"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold" />
+
+                    <ProgressBar android:id="@+id/authorized_progress"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="bottom|center_horizontal">
+
+        <TextView
+            android:id="@+id/return_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:text="@string/to_main_activity"
+            android:textColor="@color/colorWhite" />
+    </LinearLayout>
+</LinearLayout>

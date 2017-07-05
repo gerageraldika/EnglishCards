@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "17767920326",
+    "firebase_url": "https://englishcards-cec1c.firebaseio.com",
+    "project_id": "englishcards-cec1c",
+    "storage_bucket": "englishcards-cec1c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17767920326:android:e4f0715c7669ba3f",
+        "android_client_info": {
+          "package_name": "com.carpediemsolution.englishcards"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "17767920326-j28k65bsl6t0h70ok94dufvhhlcg3tvl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.carpediemsolution.englishcards",
+            "certificate_hash": "fb0d89a7711951f4c72b78f4bccc19f886733342"
+          }
+        },
+        {
+          "client_id": "17767920326-rnu6ee9g4cso0svsvi75ns76im1a9udt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgilT3j8fp3FkL6jL4nUELSBkqbA9Agd0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "17767920326-rnu6ee9g4cso0svsvi75ns76im1a9udt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

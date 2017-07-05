@@ -1,0 +1,99 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlNormal">#ffffff</item>
+        <item name="colorControlActivated">@color/accent</item>
+        <item name="colorControlHighlight">@color/accent</item>
+        <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
+        <item name="android:autoCompleteTextViewStyle">@style/RobotoAutoCompleteTextViewStyle</item>
+        <item name="android:editTextStyle">@style/RobotoEditTextStyle</item>
+        <item name="android:actionButtonStyle">@style/ActionButton</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:actionBarStyle">@style/MyApp.ActionBar</item>
+    </style>
+
+
+    <!-- Bonus: if you want to style whole Action Bar, not just the menu -->
+    <style name="MyApp.ActionBar" parent="android:Widget.Holo.ActionBar.Solid">
+        <!-- Blue background color & black bottom border -->
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:colorBackground">@color/colorAccent</item>
+        <item name="android:backgroundSplit">@color/colorAccent</item>
+        <item name="android:backgroundStacked">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+    <style name="RobotoAutoCompleteTextViewStyle" parent="android:Widget.AutoCompleteTextView">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+    <style name="RobotoEditTextStyle" parent="android:Widget.EditText">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+    <color name="accent">#ffffff</color>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:windowBackground">@color/colorWhite</item>
+        <item name="android:buttonBarButtonStyle">@style/Widget.G4S.Button.Borderless</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+
+
+    <style name="MyTheme.Dark.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowTitleStyle">@style/TextAppearance.DialogWindowTitle</item>
+        <item name="android:buttonStyle">@style/Widget.G4S.Button.Borderless</item>
+    </style>
+
+    <style name="TextAppearance.DialogWindowTitle" parent="@android:style/TextAppearance.Holo.DialogWindowTitle">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:titleTextStyle">@array/titles_graph_tab</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.G4S.Button.Borderless" parent="@android:style/Widget.Holo.Button.Borderless">
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="ActionButton" parent="@android:style/Widget.ActionButton">
+        <item name="android:drawablePadding">0dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:textSize">10dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+    </style>
+
+    <style name="ActionBarTabStyle" parent="@android:style/Widget.ActionBar.TabView">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:layout_margin">0dp</item>
+    </style>
+
+</resources>
