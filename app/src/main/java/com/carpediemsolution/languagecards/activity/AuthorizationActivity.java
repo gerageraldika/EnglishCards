@@ -23,6 +23,7 @@ import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.utils.CardUI;
 import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.model.User;
+import com.carpediemsolution.languagecards.utils.Preferences;
 
 import java.io.IOException;
 
@@ -36,9 +37,9 @@ import retrofit2.Response;
  * Created by Юлия on 25.03.2017.
  */
 
-public class SignupActivity extends Activity {
+public class AuthorizationActivity extends Activity {
 
-    private static final String LOG_TAG = "SignupActivity";
+    private static final String LOG_TAG = "AuthorizationActivity";
     private AutoCompleteTextView usernameTextView;
     private EditText passwordTextView;
     private TextView userExistsTextView;
@@ -46,6 +47,7 @@ public class SignupActivity extends Activity {
     private Button loginButton;
     private AutoCompleteTextView userEmailTextView;
     private String repeatPassword = "1";
+    private CardUI cardUI;
     final User user = new User();
     private ProgressBar progressBar;
 
@@ -53,11 +55,11 @@ public class SignupActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-
+        cardUI = new CardUI();
         progressBar = (ProgressBar) findViewById(R.id.signup_progress);
 
         usernameTextView = (AutoCompleteTextView) findViewById(R.id.email);
-        usernameTextView.setFilters(CardUI.setSizeForUserEditText());
+        usernameTextView.setFilters(cardUI.setSizeForUserEditText());
         usernameTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -74,7 +76,7 @@ public class SignupActivity extends Activity {
         });
 
         userEmailTextView = (AutoCompleteTextView) findViewById(R.id.useremail);
-        userEmailTextView.setFilters(CardUI.setSizeForUserEmailEditText());
+        userEmailTextView.setFilters(cardUI.setSizeForUserEmailEditText());
         userEmailTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -91,7 +93,7 @@ public class SignupActivity extends Activity {
         });
 
         passwordTextView = (EditText) findViewById(R.id.password);
-        passwordTextView.setFilters(CardUI.setSizeForUserEditText());
+        passwordTextView.setFilters(cardUI.setSizeForUserEditText());
         passwordTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -108,7 +110,7 @@ public class SignupActivity extends Activity {
         });
 
         repeatedPasswordView = (EditText) findViewById(R.id.repeat_password);
-        repeatedPasswordView.setFilters(CardUI.setSizeForUserEditText());
+        repeatedPasswordView.setFilters(cardUI.setSizeForUserEditText());
         repeatedPasswordView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -123,7 +125,7 @@ public class SignupActivity extends Activity {
             }
         });
 
-        userExistsTextView =(TextView)findViewById(R.id.exist_login);
+        userExistsTextView = (TextView) findViewById(R.id.exist_login);
 
         loginButton = (Button) findViewById(R.id.email_sign_in_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -133,20 +135,20 @@ public class SignupActivity extends Activity {
                 Log.d(LOG_TAG, "---RepeatPassword" + repeatPassword);
 
                 if (TextUtils.isEmpty(usernameTextView.getText())) {
-                    usernameTextView.setError("Null");
+                    usernameTextView.setError(getString(R.string.error_null));
                 } else if (TextUtils.isEmpty(passwordTextView.getText())) {
-                    passwordTextView.setError("Null");
-                } else if (!CardUI.isEmailValid(user.getEmail())) {
-                    userEmailTextView.setError("Invalid format");
+                    passwordTextView.setError(getString(R.string.error_null));
+                } else if (!cardUI.isEmailValid(user.getEmail())) {
+                    userEmailTextView.setError(getString(R.string.invalid_format));
                 } else if (!repeatPassword.equals(user.getPassword())) {
                     passwordTextView.setError("");
                     repeatedPasswordView.setError("");
-                    Toast.makeText(SignupActivity.this, "passwords are not equal ",
+                    Toast.makeText(AuthorizationActivity.this, getString(R.string.not_equal),
                             Toast.LENGTH_SHORT).show();
                 } else {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
-                            (SignupActivity.this);
-                    String token = prefs.getString("AnonToken", "");
+                            (AuthorizationActivity.this);
+                    String token = prefs.getString(Preferences.ANON_TOKEN, "");
                     user.setToken(token);
                     toSignUpUser();
                 }
@@ -165,22 +167,23 @@ public class SignupActivity extends Activity {
                 if (response.isSuccessful()) {
                     try {
                         String s = response.body().string();
-                        if (s.equals("Данный логин уже существует")) {
+                        if (s.equals(Preferences.ALREADY__EXIST)) {
                             userExistsTextView.setText(s);
                         } else {
-                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(SignupActivity.this);
-                            prefs.edit().putString("Token", s).commit();
-                            prefs.edit().remove("AnonToken").commit();
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(AuthorizationActivity.this);
+                            prefs.edit().putString(Preferences.TOKEN, s).apply();
+                            prefs.edit().remove(Preferences.ANON_TOKEN).apply();
 
-                        Log.d(LOG_TAG, "---RESULT OK authorized token returned " + s);
+                            Log.d(LOG_TAG, "---RESULT OK authorized token returned " + s);
 
-                        CardLab.get(SignupActivity.this).addUser(user);
-                            String token = prefs.getString("Token", "");
-                            if(token !=""){
-                            Toast.makeText(SignupActivity.this, R.string.welcome,
-                                Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(SignupActivity.this, AuthorizedPersonActivity.class);
-                            startActivity(intent);}
+                            CardLab.get(AuthorizationActivity.this).addUser(user);
+                            String token = prefs.getString(Preferences.TOKEN, "");
+                            if (!token.equals("")) {
+                                Toast.makeText(AuthorizationActivity.this, R.string.welcome,
+                                        Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(AuthorizationActivity.this, UserAuthorizedActivity.class);
+                                startActivity(intent);
+                            }
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -195,7 +198,7 @@ public class SignupActivity extends Activity {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(SignupActivity.this, R.string.error_inet,
+                Toast.makeText(AuthorizationActivity.this, R.string.error_inet,
                         Toast.LENGTH_SHORT).show();
                 Log.d(LOG_TAG, "---RESULT FAIL " + call.toString() + "---");
             }

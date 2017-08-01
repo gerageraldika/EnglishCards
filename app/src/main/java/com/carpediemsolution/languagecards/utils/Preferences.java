@@ -29,4 +29,7 @@ public class Preferences {
     public static final String CARDS_ADDED = "cards added";
     public static final String CARD_DELETED = "card deleted";
     public static final String NO_CARDS__EXIST = "no card exists";
+    public static final String ALREADY__EXIST = "Данный логин уже существует";
+    public static final String PASSWORD_OK = "password was sent";
+    public static final String PASSWORD_FAILTURE = "password was not sent";
 }

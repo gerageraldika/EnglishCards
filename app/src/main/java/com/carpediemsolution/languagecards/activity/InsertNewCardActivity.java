@@ -45,6 +45,7 @@ public class InsertNewCardActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "InsertActivity";
     private Card mCard;
+    private CardUI cardUI;
     private InterstitialAd interstitial;
 
     @BindView(R.id.new_card_word)
@@ -88,12 +89,13 @@ public class InsertNewCardActivity extends AppCompatActivity {
         setSupportActionBar(toolbarTheme);
 
         mCard = new Card();
+        cardUI = new CardUI();
         mCard.setId(String.valueOf(UUID.randomUUID()));
         mCard.setPerson_id(0);
 
-        editWord.setFilters(CardUI.setSizeForCardEditText());
-        editTranslate.setFilters(CardUI.setSizeForCardEditText());
-        editDescription.setFilters(CardUI.setSizeForCardDescriptionEditText());
+        editWord.setFilters(cardUI.setSizeForCardEditText());
+        editTranslate.setFilters(cardUI.setSizeForCardEditText());
+        editDescription.setFilters(cardUI.setSizeForCardDescriptionEditText());
 
         interstitial = new InterstitialAd(this);
         interstitial.setAdUnitId(getString(R.string.admob_for_insert_activity));
@@ -215,7 +217,7 @@ public class InsertNewCardActivity extends AppCompatActivity {
                 }
             });
 
-            Intent intent = new Intent(InsertNewCardActivity.this, CardsMainActivity.class);
+            Intent intent = new Intent(InsertNewCardActivity.this, UserCardsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
@@ -227,5 +229,4 @@ public class InsertNewCardActivity extends AppCompatActivity {
                 .build();
         interstitial.loadAd(adRequest);
     }
-
 }

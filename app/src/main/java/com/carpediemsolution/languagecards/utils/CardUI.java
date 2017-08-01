@@ -14,41 +14,45 @@ import java.util.regex.Pattern;
 
 public class CardUI {
 
-    public static InputFilter[] setSizeForCardEditText() {
+    public CardUI(){
+
+    }
+
+    public InputFilter[] setSizeForCardEditText() {
         int maxLength = 40;
         InputFilter[] FilterArray = new InputFilter[1];
         FilterArray[0] = new InputFilter.LengthFilter(maxLength);
         return FilterArray;
     }
 
-    public static InputFilter[] setSizeForUserEditText() {
+    public InputFilter[] setSizeForUserEditText() {
         int maxLength = 15;
         InputFilter[] FilterArray = new InputFilter[1];
         FilterArray[0] = new InputFilter.LengthFilter(maxLength);
         return FilterArray;
     }
 
-    public static InputFilter[] setSizeForCardDescriptionEditText() {
+    public InputFilter[] setSizeForCardDescriptionEditText() {
         int maxLength = 998;
         InputFilter[] FilterArray = new InputFilter[1];
         FilterArray[0] = new InputFilter.LengthFilter(maxLength);
         return FilterArray;
     }
 
-    public static InputFilter[] setSizeForUserEmailEditText() {
+    public InputFilter[] setSizeForUserEmailEditText() {
         int maxLength = 35;
         InputFilter[] FilterArray = new InputFilter[1];
         FilterArray[0] = new InputFilter.LengthFilter(maxLength);
         return FilterArray;
     }
 
-    public static String dialogMessage(Card card) {
+    public String dialogMessage(Card card) {
         if (card.getDescription() == null) {
             return "There is no description for this card";
         } else return card.getDescription();
     }
 
-    public static boolean isEmailValid(String email) {
+    public boolean isEmailValid(String email) {
         boolean isValid = false;
 
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
@@ -61,7 +65,7 @@ public class CardUI {
         return isValid;
     }
 
-    public static String returnTheme(Card card) {
+    public String returnTheme(Card card) {
 
         switch (card.getTheme()) {
             case (CardDBSchema.CardTable.Themes.THEME_CULTURE_ART):

@@ -18,6 +18,7 @@ import com.carpediemsolution.languagecards.model.Card;
 import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.utils.CardUI;
 import com.carpediemsolution.languagecards.R;
+import com.carpediemsolution.languagecards.utils.Preferences;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -119,7 +120,7 @@ public class ServerCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return (position == cards.size() - 1 && isLoadingAdded) ? LOADING : ITEM;
     }
 
-    public void add(Card card) {
+    private void add(Card card) {
         cards.add(card);
         // notifyItemInserted(cards.size() - 1);
         notifyItemInserted(cards.size());
@@ -131,7 +132,7 @@ public class ServerCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    public void remove(Card card) {
+    private void remove(Card card) {
         int position = cards.indexOf(card);
         if (position > -1) {
             cards.remove(position);
@@ -169,17 +170,17 @@ public class ServerCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    public Card getItem(int position) {
+    private Card getItem(int position) {
         return cards.get(position);
     }
 
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    private class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         TextView mWordTextView;
         ImageView imageView;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             mWordTextView = (TextView) itemView.findViewById(R.id.list_item__word_text_view);
             imageView = (ImageView) itemView.findViewById(R.id.image_for_description);
@@ -214,9 +215,9 @@ public class ServerCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    protected class LoadingVH extends RecyclerView.ViewHolder {
+    private class LoadingVH extends RecyclerView.ViewHolder {
 
-        public LoadingVH(View itemView) {
+        private LoadingVH(View itemView) {
             super(itemView);
         }
     }
@@ -228,15 +229,15 @@ public class ServerCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         interstitial.loadAd(adRequest);
     }
 
-    public void addCard(Card mCard) {
+    private void addCard(Card mCard) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
                 (context);
-        String token = prefs.getString("Token", "");
-        if (token == "") {
-            token = prefs.getString("AnonToken", "");
-            if (token == "") {
+        String token = prefs.getString(Preferences.TOKEN, "");
+        if (token.equals("")) {
+            token = prefs.getString(Preferences.ANON_TOKEN, "");
+            if (token.equals("")) {
                 token = "anonym " + new Date().toString();
-                prefs.edit().putString("AnonToken", token).commit();
+                prefs.edit().putString(Preferences.ANON_TOKEN, token).apply();
             }
         }
         mCard.setId(String.valueOf(UUID.randomUUID()));
@@ -245,11 +246,12 @@ public class ServerCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
 
-    public void showCardDescription(int position, Context context) {
+    private void showCardDescription(int position, Context context) {
         mCard = cards.get(position);
+        CardUI cardUI = new CardUI();
 
         interstitial = new InterstitialAd(context);
-        interstitial.setAdUnitId("ca-app-pub-9016583513972837/7013639106");
+        interstitial.setAdUnitId(context.getString(R.string.recycler_view_admob));
 
         interstitial.setAdListener(new AdListener() {
             @Override
@@ -262,8 +264,8 @@ public class ServerCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         requestNewInterstitial();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MyTheme_Dark_Dialog);
-        String dialogMessage = CardUI.dialogMessage(mCard);
-        builder.setTitle(mCard.getWord() + " ~ " + CardUI.returnTheme(mCard))
+        String dialogMessage = cardUI.dialogMessage(mCard);
+        builder.setTitle(mCard.getWord() + " ~ " + cardUI.returnTheme(mCard))
                 .setMessage(mCard.getTranslate() + "\n\n" + dialogMessage)
                 .setPositiveButton(context.getString(R.string.add_card), new DialogInterface.OnClickListener() {
                     @Override

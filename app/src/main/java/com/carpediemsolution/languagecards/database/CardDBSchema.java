@@ -38,6 +38,5 @@ public class CardDBSchema {
             public static final String THEME_SHOPPING = "shop";
             public static final String THEME_FOOD_DRINKS = "food";
         }
-
     }
 }

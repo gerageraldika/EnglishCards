@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.carpediemsolution.languagecards.App;
 import com.carpediemsolution.languagecards.api.WebApi;
 import com.carpediemsolution.languagecards.model.Card;
@@ -43,6 +44,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -52,7 +54,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class CardsMainActivity extends AppCompatActivity
+public class UserCardsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String LOG_TAG = "MainActivity";
@@ -64,12 +66,13 @@ public class CardsMainActivity extends AppCompatActivity
     private List<Card> mCards;
     private Card mCard;
     private CardLab cardsLab;
+    private CardUI cardUI;
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
     @OnClick(R.id.fab)
     public void onClick() {
-        Intent intent = new Intent(CardsMainActivity.this, InsertNewCardActivity.class);
+        Intent intent = new Intent(UserCardsActivity.this, InsertNewCardActivity.class);
         startActivity(intent);
     }
 
@@ -104,10 +107,12 @@ public class CardsMainActivity extends AppCompatActivity
             }
         });
 
-        cardsLab = CardLab.get(CardsMainActivity.this);
+        cardsLab = CardLab.get(UserCardsActivity.this);
         mCards = cardsLab.getCards();
-        cardRecyclerView.setLayoutManager(new GridLayoutManager(CardsMainActivity.this, 3));
+        cardRecyclerView.setLayoutManager(new GridLayoutManager(UserCardsActivity.this, 3));
         updateUI();
+
+        cardUI = new CardUI();
 
         setAlarm();
     }
@@ -245,48 +250,49 @@ public class CardsMainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        if (id == R.id.action_stock) {
-            Intent intent = new Intent(CardsMainActivity.this, ServerCardsListActivity.class);
-            startActivity(intent);
-        }
-        if (id == R.id.action_my_cards) {
-            Intent intent = new Intent(CardsMainActivity.this, CardsMainActivity.class);
-            startActivity(intent);
-        }
-
-        if (id == R.id.action_line) {
-            cardRecyclerView.setLayoutManager(new GridLayoutManager(CardsMainActivity.this, 1));
-            updateUI();
-        }
-        if (id == R.id.action_frame) {
-            cardRecyclerView.setLayoutManager(new GridLayoutManager(CardsMainActivity.this, 3));
-            updateUI();
-        }
-        if (id == R.id.action_settings) {
-
-            SharedPreferences prefs = PreferenceManager.
-                    getDefaultSharedPreferences(CardsMainActivity.this);
-            String token = prefs.getString(Preferences.TOKEN, "");
-            Log.d(LOG_TAG, "---token " + token);
-            if (token == "") {
-                Intent intent = new Intent(CardsMainActivity.this, LoginActivity.class);
-                startActivity(intent);
-            } else {
-                Intent intent = new Intent(CardsMainActivity.this, AuthorizedPersonActivity.class);
+        switch (id) {
+            case (R.id.action_stock): {
+                Intent intent = new Intent(UserCardsActivity.this, ServerCardsActivity.class);
                 startActivity(intent);
             }
-            return true;
-        }
-        if (id == R.id.action_about_app) {
-            Intent intent = new Intent(CardsMainActivity.this, InformationActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        if (id == R.id.action_sync_cards) {
-            Intent intent = new Intent(CardsMainActivity.this, CardsSyncActivity.class);
-            startActivity(intent);
-            return true;
+            case (R.id.action_my_cards): {
+                Intent intent = new Intent(UserCardsActivity.this, UserCardsActivity.class);
+                startActivity(intent);
+            }
+
+            case (R.id.action_line): {
+                cardRecyclerView.setLayoutManager(new GridLayoutManager(UserCardsActivity.this, 1));
+                updateUI();
+            }
+            case (R.id.action_frame): {
+                cardRecyclerView.setLayoutManager(new GridLayoutManager(UserCardsActivity.this, 3));
+                updateUI();
+            }
+            case (R.id.action_settings): {
+
+                SharedPreferences prefs = PreferenceManager.
+                        getDefaultSharedPreferences(UserCardsActivity.this);
+                String token = prefs.getString(Preferences.TOKEN, "");
+                Log.d(LOG_TAG, "---token " + token);
+                if (token.equals("")) {
+                    Intent intent = new Intent(UserCardsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(UserCardsActivity.this, UserAuthorizedActivity.class);
+                    startActivity(intent);
+                }
+                return true;
+            }
+            case (R.id.action_about_app): {
+                Intent intent = new Intent(UserCardsActivity.this, InformationActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            case (R.id.action_sync_cards): {
+                Intent intent = new Intent(UserCardsActivity.this, CardsSyncActivity.class);
+                startActivity(intent);
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -295,57 +301,72 @@ public class CardsMainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         CardLab calcLab = CardLab.get(this);
-
-        if (id == R.id.culture_art) {
-            mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
-            updateUI();
-        } else if (id == R.id.modern_technologies) {
-            mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
-            updateUI();
-        } else if (id == R.id.society_politics) {
-            mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
-            updateUI();
-        } else if (id == R.id.adventure_travel) {
-            mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
-            updateUI();
-        } else if (id == R.id.nature_weather) {
-            mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
-            updateUI();
-        } else if (id == R.id.education_profession) {
-            mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
-            updateUI();
-        } else if (id == R.id.appearance_character) {
-            mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
-            updateUI();
-        } else if (id == R.id.clothes_fashion) {
-            mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
-            updateUI();
-        } else if (id == R.id.sport) {
-            mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_SPORT);
-            updateUI();
-        } else if (id == R.id.family_relationship) {
-            mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
-            updateUI();
-        } else if (id == R.id.order_of_day) {
-            mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
-            updateUI();
-        } else if (id == R.id.hobbies_free_time) {
-            mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
-            updateUI();
-        } else if (id == R.id.customs_traditions) {
-            mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
-            updateUI();
-        } else if (id == R.id.shopping) {
-            mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_SHOPPING);
-            updateUI();
-        } else if (id == R.id.food_drinks) {
-            mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
-            updateUI();
-        } else if (id == R.id.all_items) {
-            mCards = calcLab.getCards();
-            updateUI();
+        switch (id) {
+            case (R.id.culture_art): {
+                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
+                updateUI();
+            }
+            case (R.id.modern_technologies): {
+                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
+                updateUI();
+            }
+            case (R.id.society_politics): {
+                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
+                updateUI();
+            }
+            case (R.id.adventure_travel): {
+                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
+                updateUI();
+            }
+            case (R.id.nature_weather): {
+                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
+                updateUI();
+            }
+            case (R.id.education_profession): {
+                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
+                updateUI();
+            }
+            case (R.id.appearance_character): {
+                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
+                updateUI();
+            }
+            case (R.id.clothes_fashion): {
+                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
+                updateUI();
+            }
+            case (R.id.sport): {
+                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_SPORT);
+                updateUI();
+            }
+            case (R.id.family_relationship): {
+                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
+                updateUI();
+            }
+            case (R.id.order_of_day): {
+                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
+                updateUI();
+            }
+            case (R.id.hobbies_free_time): {
+                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
+                updateUI();
+            }
+            case (R.id.customs_traditions): {
+                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
+                updateUI();
+            }
+            case (R.id.shopping): {
+                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_SHOPPING);
+                updateUI();
+            }
+            case (R.id.food_drinks): {
+                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
+                updateUI();
+            }
+            case (R.id.all_items): {
+                mCards = calcLab.getCards();
+                updateUI();
+            }
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -354,9 +375,9 @@ public class CardsMainActivity extends AppCompatActivity
     public void deleteCard(final int position) {
         mCard = mCards.get(position);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(CardsMainActivity.this, R.style.MyTheme_Dark_Dialog);
-        builder.setTitle(mCard.getWord() + " ~ " + CardUI.returnTheme(mCard));
-        String dialogMessage = CardUI.dialogMessage(mCard);
+        AlertDialog.Builder builder = new AlertDialog.Builder(UserCardsActivity.this, R.style.MyTheme_Dark_Dialog);
+        builder.setTitle(mCard.getWord() + " ~ " + cardUI.returnTheme(mCard));
+        String dialogMessage = cardUI.dialogMessage(mCard);
         builder.setMessage(mCard.getTranslate() + "\n\n" + dialogMessage);
         builder.setPositiveButton(getString(R.string.remove), new DialogInterface.OnClickListener() {
             @Override
@@ -366,7 +387,7 @@ public class CardsMainActivity extends AppCompatActivity
         }).setNegativeButton(getString(R.string.edit), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(CardsMainActivity.this, EditCardActivity.class);
+                Intent intent = new Intent(UserCardsActivity.this, EditCardActivity.class);
                 Bundle b = new Bundle();
                 b.putString("card", mCard.getId()); //Your id
                 intent.putExtras(b);
@@ -376,7 +397,7 @@ public class CardsMainActivity extends AppCompatActivity
     }
 
     protected void openDeleteDialog(final int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(CardsMainActivity.this, R.style.MyTheme_Dark_Dialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(UserCardsActivity.this, R.style.MyTheme_Dark_Dialog);
         builder.setMessage(getString(R.string.are_you_sure));
         builder.setPositiveButton(getString(R.string.remove), new DialogInterface.OnClickListener() {
             @Override
@@ -391,7 +412,7 @@ public class CardsMainActivity extends AppCompatActivity
                 mCards.remove(position);
 
                 final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
-                        (CardsMainActivity.this);
+                        (UserCardsActivity.this);
                 String token = prefs.getString(Preferences.TOKEN, "");
                 if (token.equals("")) {
                     token = prefs.getString(Preferences.ANON_TOKEN, "");
@@ -431,7 +452,7 @@ public class CardsMainActivity extends AppCompatActivity
                                         CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
                             }
                         } else {
-                            Toast.makeText(CardsMainActivity.this, R.string.delete_cancel,
+                            Toast.makeText(UserCardsActivity.this, R.string.delete_cancel,
                                     Toast.LENGTH_SHORT).show();
                             mCard = cardsLab.getCard(uuidString);
                             mCards.add(mCard);

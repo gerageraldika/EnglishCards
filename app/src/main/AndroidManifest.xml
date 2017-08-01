@@ -26,7 +26,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.carpediemsolution.languagecards.activity.CardsMainActivity"
+            android:name="com.carpediemsolution.languagecards.activity.UserCardsActivity"
             android:label="Language Cards"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -43,13 +43,13 @@
         </activity>
 
         <activity
-            android:name="com.carpediemsolution.languagecards.activity.ServerCardsListActivity"
+            android:name="com.carpediemsolution.languagecards.activity.ServerCardsActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
-            android:name="com.carpediemsolution.languagecards.activity.ServerCardsListByThemeActivity"
+            android:name="com.carpediemsolution.languagecards.activity.ServerSortedCardsActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
@@ -60,12 +60,12 @@
         </activity>
 
         <activity
-            android:name="com.carpediemsolution.languagecards.activity.AuthorizedPersonActivity"
+            android:name="com.carpediemsolution.languagecards.activity.UserAuthorizedActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>AuthorizedPersonActivity
 
         <activity
-            android:name="com.carpediemsolution.languagecards.activity.SignupActivity"
+            android:name="com.carpediemsolution.languagecards.activity.AuthorizationActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 

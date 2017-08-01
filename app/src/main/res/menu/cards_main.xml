@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.carpediemsolution.languagecards.activity.CardsMainActivity">
+    tools:context="com.carpediemsolution.languagecards.activity.UserCardsActivity">
 
     <item
         android:id="@+id/action_settings"
@@ -26,27 +26,27 @@
         android:icon="@drawable/mycards"
         android:orderInCategory="100"
         android:title="My"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_stock"
         android:icon="@drawable/stock"
         android:orderInCategory="100"
         android:title="All"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_frame"
         android:icon="@drawable/ic_action_frame"
         android:orderInCategory="100"
         android:title=""
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_line"
         android:icon="@drawable/line"
         android:orderInCategory="100"
         android:title=""
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>
 

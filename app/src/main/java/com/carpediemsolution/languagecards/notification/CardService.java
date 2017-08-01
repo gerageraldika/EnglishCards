@@ -13,7 +13,7 @@ import android.util.Log;
 
 import com.carpediemsolution.languagecards.model.Card;
 import com.carpediemsolution.languagecards.dao.CardLab;
-import com.carpediemsolution.languagecards.activity.CardsMainActivity;
+import com.carpediemsolution.languagecards.activity.UserCardsActivity;
 import com.carpediemsolution.languagecards.R;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public class CardService extends IntentService {
         Log.i(TAG,"Alarm Service has started.");
         Context context = this.getApplicationContext();
         notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent mIntent = new Intent(this, CardsMainActivity.class);
+        Intent mIntent = new Intent(this, UserCardsActivity.class);
         pendingIntent = PendingIntent.getActivity(context, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Resources res = this.getResources();

@@ -33,7 +33,7 @@ import retrofit2.Response;
 /**
  * Created by Юлия on 17.04.2017.
  */
-public class AuthorizedPersonActivity extends Activity {
+public class UserAuthorizedActivity extends Activity {
 
     @BindView(R.id.authorized_progress)
     ProgressBar progressBar;
@@ -47,17 +47,17 @@ public class AuthorizedPersonActivity extends Activity {
 
     @OnClick(R.id.forget_data)
     public void goToPasswordSenderActivity() {
-        Intent intent = new Intent(AuthorizedPersonActivity.this, PasswordSenderActivity.class);
+        Intent intent = new Intent(UserAuthorizedActivity.this, PasswordSenderActivity.class);
         startActivity(intent);
     }
 
     @OnClick(R.id.return_main)
     public void goToMainActivity() {
-        Intent intent = new Intent(AuthorizedPersonActivity.this, CardsMainActivity.class);
+        Intent intent = new Intent(UserAuthorizedActivity.this, UserCardsActivity.class);
         startActivity(intent);
     }
 
-    User user = CardLab.get(AuthorizedPersonActivity.this).getUser();
+    User user = CardLab.get(UserAuthorizedActivity.this).getUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +71,10 @@ public class AuthorizedPersonActivity extends Activity {
     private void sendUserCards() {
 
         final SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(AuthorizedPersonActivity.this);
+                .getDefaultSharedPreferences(UserAuthorizedActivity.this);
 
         String token = prefs.getString(Preferences.TOKEN, "");
-        List<Card> userCards = CardLab.get(AuthorizedPersonActivity.this).getCards();
+        List<Card> userCards = CardLab.get(UserAuthorizedActivity.this).getCards();
 
         final WebApi webApi = App.getWebApi();
         Call<ResponseBody> callPost = webApi.postAllCardsToServer(token, userCards);
@@ -88,9 +88,9 @@ public class AuthorizedPersonActivity extends Activity {
                         String s = response.body().string();
                         if (s.equals(Preferences.CARDS_ADDED)) {
                             prefs.edit().remove(Preferences.TOKEN).apply();
-                            CardLab.get(AuthorizedPersonActivity.this).deleteAllCards();
-                            CardLab.get(AuthorizedPersonActivity.this).deleteUser();
-                            Intent intent = new Intent(AuthorizedPersonActivity.this, CardsMainActivity.class);
+                            CardLab.get(UserAuthorizedActivity.this).deleteAllCards();
+                            CardLab.get(UserAuthorizedActivity.this).deleteUser();
+                            Intent intent = new Intent(UserAuthorizedActivity.this, UserCardsActivity.class);
                             startActivity(intent);
                         }
                     } catch (IOException e) {
@@ -109,7 +109,7 @@ public class AuthorizedPersonActivity extends Activity {
     }
 
     private void toLoginOut() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(AuthorizedPersonActivity.this, R.style.MyTheme_Dark_Dialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(UserAuthorizedActivity.this, R.style.MyTheme_Dark_Dialog);
         builder.setMessage(getString(R.string.log_out_message));
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
@@ -119,14 +119,14 @@ public class AuthorizedPersonActivity extends Activity {
         }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                return;
+                dialog.dismiss();
             }
         }).show();
     }
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(AuthorizedPersonActivity.this, CardsMainActivity.class);
+        Intent intent = new Intent(UserAuthorizedActivity.this, UserCardsActivity.class);
         startActivity(intent);
     }
 }

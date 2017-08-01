@@ -13,14 +13,12 @@ import com.carpediemsolution.languagecards.R;
 
 public class InformationActivity extends Activity {
 
-    private TextView infoTextView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
-        infoTextView = (TextView) findViewById(R.id.info_textview);
+        TextView infoTextView = (TextView) findViewById(R.id.info_textview);
 
         infoTextView.setText(getString(R.string.info));
     }

@@ -58,7 +58,6 @@ public class CardLab {
     }
 
     public List<Card> getCards() {
-
         Cursor cursor1 = mDatabase.query(
                 CardTable.NAME_ENRUS,
                 null, // Columns - null selects all columns
@@ -78,6 +77,7 @@ public class CardLab {
             cursor.moveToNext();
         }
         cursor.close();
+        cursor1.close();
         // Collections.reverse(cards);
         Collections.shuffle(cards);
         Log.d(LAB_LOG, "---- getCards----" + cards);
@@ -90,28 +90,27 @@ public class CardLab {
                 + " = '" + theme + "'";
         //Cursor cursor = mDb.rawQuery(sSelect, null);
         List<Card> cards = new ArrayList<>();
-        if (CardTable.NAME_ENRUS != null)
+        try {
+            Cursor cursor1 = mDatabase.rawQuery(sSelect, null);
 
-            try {
-                Cursor cursor1 = mDatabase.rawQuery(sSelect, null);
+            if (cursor1 != null) {
 
-                if (cursor1 != null) {
-
-                    CardCursorWrapper cursor = new CardCursorWrapper(cursor1);
-                    cursor.moveToFirst();
-                    while (!cursor.isAfterLast()) {
-                        cards.add(cursor.getCard());
-                        cursor.moveToNext();
-                    }
-                    cursor.close();
-                    Log.d(LAB_LOG, "---- getCardsByTheme----" + cards);
+                CardCursorWrapper cursor = new CardCursorWrapper(cursor1);
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    cards.add(cursor.getCard());
+                    cursor.moveToNext();
                 }
-                Collections.reverse(cards);
-            } catch (SQLiteException e) {
-                System.out.print("no cards");
-            } catch (Exception e) {
-                System.out.print("no cards");
+                cursor.close();
+                cursor1.close();
+                Log.d(LAB_LOG, "---- getCardsByTheme----" + cards);
             }
+            Collections.reverse(cards);
+        } catch (SQLiteException e) {
+            Log.d(LAB_LOG, "sqlite e" + e.toString());
+        } catch (Exception ex) {
+            Log.d(LAB_LOG, "exception" + ex.toString());
+        }
         Collections.shuffle(cards);
         return cards;
     }
@@ -158,6 +157,7 @@ public class CardLab {
                 null, // having
                 null  // orderBy
         );
+        cursor.close();
         return new CardCursorWrapper(cursor);
     }
 

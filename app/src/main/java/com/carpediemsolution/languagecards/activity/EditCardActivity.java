@@ -104,6 +104,8 @@ public class EditCardActivity extends AppCompatActivity {
             }
         });
 
+        CardUI cardUI = new CardUI();
+
         requestNewInterstitial();
 
         Toolbar toolbarTheme = (Toolbar) findViewById(R.id.toolbar_card_theme);
@@ -111,9 +113,9 @@ public class EditCardActivity extends AppCompatActivity {
 
         mCard = CardLab.get(EditCardActivity.this).getCard(id);
 
-        editWord.setFilters(CardUI.setSizeForCardEditText());
-        editTranslate.setFilters(CardUI.setSizeForCardEditText());
-        editDescription.setFilters(CardUI.setSizeForCardDescriptionEditText());
+        editWord.setFilters(cardUI.setSizeForCardEditText());
+        editTranslate.setFilters(cardUI.setSizeForCardEditText());
+        editDescription.setFilters(cardUI.setSizeForCardDescriptionEditText());
 
         editWord.setText(mCard.getWord());
         editTranslate.setText(mCard.getTranslate());
@@ -230,7 +232,7 @@ public class EditCardActivity extends AppCompatActivity {
                 }
             });
 
-            Intent intent = new Intent(EditCardActivity.this, CardsMainActivity.class);
+            Intent intent = new Intent(EditCardActivity.this, UserCardsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
