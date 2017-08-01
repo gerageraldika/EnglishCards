@@ -1,4 +1,4 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.activity;
 
 
 import android.content.Intent;
@@ -22,11 +22,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.carpediemsolution.languagecards.model.Card;
+import com.carpediemsolution.languagecards.dao.CardLab;
+import com.carpediemsolution.languagecards.UIUtils.CardUI;
+import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.api.CardUpdateOnServerAPI;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
 import java.util.Date;
@@ -218,12 +221,12 @@ public class EditCardActivity extends AppCompatActivity {
 
            String token = prefs.getString("Token", "");
 
-           if (token == "") {
+           if (token.equals("")) {
                token = prefs.getString("AnonToken", "");
 
-               if (token == "") {
+               if (token.equals("")) {
                    token = "anonym " + new Date().toString();
-                   prefs.edit().putString("AnonToken", token).commit();
+                   prefs.edit().putString("AnonToken", token).apply();
                }
            }
            Log.d(LOG_TAG, "---token " + token);

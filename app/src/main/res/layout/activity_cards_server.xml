@@ -13,7 +13,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.carpediemsolution.languagecards.ServerCardsListActivity">
+        tools:context="com.carpediemsolution.languagecards.activity.ServerCardsListActivity">
 
 
         <LinearLayout
@@ -35,12 +35,8 @@
                     android:layout_height="?attr/actionBarSize"
                     android:background="?attr/colorPrimary"
                     app:contentInsetStartWithNavigation="0dp"
-                    android:contentInsetLeft="0dp"
-                    android:contentInsetStart="0dp"
                     app:contentInsetLeft="0dp"
                     app:contentInsetStart="0dp"
-                    android:contentInsetRight="0dp"
-                    android:contentInsetEnd="0dp"
                     app:popupTheme="@style/MyApp.ActionBar"
                     app:contentInsetRight="0dp"
                     app:contentInsetEnd="0dp"

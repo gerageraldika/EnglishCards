@@ -1,4 +1,4 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,10 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.carpediemsolution.languagecards.model.Card;
+import com.carpediemsolution.languagecards.dao.CardLab;
+import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.api.UserCardsToServerAPI;
 import java.io.IOException;
 import java.util.List;

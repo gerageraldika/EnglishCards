@@ -1,4 +1,4 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +7,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,6 +23,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.carpediemsolution.languagecards.model.Card;
+import com.carpediemsolution.languagecards.dao.CardLab;
+import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.api.CardsThemeAPI;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
 import com.carpediemsolution.languagecards.pagination.PaginationScrollListener;
@@ -36,7 +41,7 @@ import retrofit2.Response;
  * Created by Юлия on 18.05.2017.
  */
 
-public class ServerCardsListActivityByTheme extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ServerCardsListByThemeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String LOG_TAG = "ServerListActivity";
     private ProgressBar progressBar;
     private RecyclerView mCardRecyclerView;
@@ -57,12 +62,12 @@ public class ServerCardsListActivityByTheme extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.parseColor("#558B2F"));
         setSupportActionBar(toolbar);
-        setSupportActionBar(toolbar);
+
         progressBar = (ProgressBar) findViewById(R.id.server_cards_loading_progress);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#558B2F"), PorterDuff.Mode.MULTIPLY);
 
         mCardRecyclerView = (RecyclerView) findViewById(R.id.card_recycler_view);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
         mCardRecyclerView.setLayoutManager(gridLayoutManager);
 
         mAdapter = new ServerCardsAdapter(this);
@@ -85,7 +90,7 @@ public class ServerCardsListActivityByTheme extends AppCompatActivity implements
 
     private void downloadAllCardsFirstTime(String theme)  {
 
-        CardsThemeAPI service = CardLab.get(ServerCardsListActivityByTheme.this).getRetfofitClient().create(CardsThemeAPI.class);
+        CardsThemeAPI service = CardLab.get(ServerCardsListByThemeActivity.this).getRetfofitClient().create(CardsThemeAPI.class);
         Call<List<Card>> call = service.getCardsByTheme(theme);
         progressBar.setVisibility(View.VISIBLE);
         call.enqueue(new Callback<List<Card>>() {
@@ -94,7 +99,7 @@ public class ServerCardsListActivityByTheme extends AppCompatActivity implements
                 progressBar.setVisibility(View.INVISIBLE);
                 if (response.isSuccessful()) {
                     try {
-                        List <Card> cards = new ArrayList<Card>();
+                        List <Card> cards = new ArrayList<>();
                         cards.addAll(response.body());
                         mAdapter.addAll(cards);
                     } catch (NullPointerException e) {
@@ -107,7 +112,7 @@ public class ServerCardsListActivityByTheme extends AppCompatActivity implements
             @Override
             public void onFailure(Call<List<Card>> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(ServerCardsListActivityByTheme.this, R.string.error_inet,
+                Toast.makeText(ServerCardsListByThemeActivity.this, R.string.error_inet,
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -115,7 +120,7 @@ public class ServerCardsListActivityByTheme extends AppCompatActivity implements
     }
 
     private void downloadAllCardsNextTime(String theme) {
-        CardsThemeAPI service = CardLab.get(ServerCardsListActivityByTheme.this).getRetfofitClient().create(CardsThemeAPI.class);
+        CardsThemeAPI service = CardLab.get(ServerCardsListByThemeActivity.this).getRetfofitClient().create(CardsThemeAPI.class);
         Call<List<Card>> call = service.getCardsByTheme(theme);
         progressBar.setVisibility(View.VISIBLE);
         call.enqueue(new Callback<List<Card>>() {
@@ -126,7 +131,7 @@ public class ServerCardsListActivityByTheme extends AppCompatActivity implements
                 isLoading = false;
                 if (response.isSuccessful()) {
                     try {
-                        List <Card> cards = new ArrayList<Card>();
+                        List <Card> cards = new ArrayList<>();
                         cards.addAll(response.body());
                         mAdapter.addAll(cards);
                     } catch (NullPointerException e) {
@@ -139,7 +144,7 @@ public class ServerCardsListActivityByTheme extends AppCompatActivity implements
             @Override
             public void onFailure(Call<List<Card>> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(ServerCardsListActivityByTheme.this, R.string.error_inet,
+                Toast.makeText(ServerCardsListByThemeActivity.this, R.string.error_inet,
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -155,48 +160,48 @@ public class ServerCardsListActivityByTheme extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.action_stock) {
-            Intent intent = new Intent(ServerCardsListActivityByTheme.this,ServerCardsListActivity.class);
+            Intent intent = new Intent(ServerCardsListByThemeActivity.this,ServerCardsListActivity.class);
             startActivity(intent);
         }
         if(id == R.id.action_my_cards){
-            Intent intent = new Intent(ServerCardsListActivityByTheme.this,CardsMainActivity.class);
+            Intent intent = new Intent(ServerCardsListByThemeActivity.this,CardsMainActivity.class);
             startActivity(intent);
         }
 
         if (id == R.id.action_line) {
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,1);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,1);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
 
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,returnTheme());
             Log.d(LOG_TAG, "---theme in scroll " + returnTheme());
         }
         if (id == R.id.action_frame) {
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,returnTheme());
             Log.d(LOG_TAG, "---theme in scroll " + returnTheme());
         }
         if (id == R.id.action_settings) {
             SharedPreferences prefs = PreferenceManager.
-                    getDefaultSharedPreferences(ServerCardsListActivityByTheme.this);
+                    getDefaultSharedPreferences(ServerCardsListByThemeActivity.this);
             String token = prefs.getString("Token", "");
             Log.d(LOG_TAG, "---token " + token);
-            if (token == "") {
-                Intent intent = new Intent(ServerCardsListActivityByTheme.this, LoginActivity.class);
+            if (token.equals("")) {
+                Intent intent = new Intent(ServerCardsListByThemeActivity.this, LoginActivity.class);
                 startActivity(intent);
             } else {
-                Intent intent = new Intent(ServerCardsListActivityByTheme.this, AuthorizedPersonActivity.class);
+                Intent intent = new Intent(ServerCardsListByThemeActivity.this, AuthorizedPersonActivity.class);
                 startActivity(intent);
             }
             return true;
         }
         if (id == R.id.action_about_app) {
-            Intent intent = new Intent(ServerCardsListActivityByTheme.this, InformationActivity.class);
+            Intent intent = new Intent(ServerCardsListByThemeActivity.this, InformationActivity.class);
             startActivity(intent);
             return true;
         }
         if (id == R.id.action_sync_cards) {
-            Intent intent = new Intent(ServerCardsListActivityByTheme.this, CardsSyncActivity.class);
+            Intent intent = new Intent(ServerCardsListByThemeActivity.this, CardsSyncActivity.class);
             startActivity(intent);
             return true;
         }
@@ -205,161 +210,122 @@ public class ServerCardsListActivityByTheme extends AppCompatActivity implements
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        Intent intent = new Intent(ServerCardsListActivityByTheme.this, ServerCardsListActivityByTheme.class);
+        Intent intent = new Intent(ServerCardsListByThemeActivity.this, ServerCardsListByThemeActivity.class);
         Bundle b = new Bundle();
         int id = item.getItemId();
         if (id == R.id.all_items) {
-            Intent intentAllCards = new Intent(ServerCardsListActivityByTheme.this,ServerCardsListActivity.class);
+            Intent intentAllCards = new Intent(ServerCardsListByThemeActivity.this,ServerCardsListActivity.class);
             startActivity(intentAllCards);
         }
         else if (id == R.id.culture_art) {
             mAdapter.clear();
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
-           // b.putString("card", CardDBSchema.CardTable.Themes.THEME_CULTURE_ART); //Your id
-           // intent.putExtras(b);
-           // startActivity(intent);
         }
         else if (id == R.id.modern_technologies) {
             mAdapter.clear();
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
-
-           // b.putString("card", CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES); //Your id
-           // intent.putExtras(b);
-           // startActivity(intent);
         }
         else if (id == R.id.society_politics) {
             mAdapter.clear();
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
-           // b.putString("card", CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS); //Your id
-           // intent.putExtras(b);
-           // startActivity(intent);
-        } else if (id == R.id.adventure_travel) {
+        }
+        else if (id == R.id.adventure_travel) {
             mAdapter.clear();
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
-          //  b.putString("card", CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL); //Your id
-           // intent.putExtras(b);
-           // startActivity(intent);
+
         } else if (id == R.id.nature_weather) {
             mAdapter.clear();
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
-           // b.putString("card", CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER); //Your id
-           // intent.putExtras(b);
-           // startActivity(intent);
         } else if (id == R.id.education_profession) {
             mAdapter.clear();
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
-           // b.putString("card", CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION); //Your id
-            //intent.putExtras(b);
-          //  startActivity(intent);
+
         } else if (id == R.id.appearance_character) {
             mAdapter.clear();
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
-           // b.putString("card", CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER); //Your id
-           // intent.putExtras(b);
-           // startActivity(intent);
+
         } else if (id == R.id.clothes_fashion) {
             mAdapter.clear();
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
-          //  b.putString("card", CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION); //Your id
-           // intent.putExtras(b);
-          //  startActivity(intent);
+
         } else if (id == R.id.sport) {
             mAdapter.clear();
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_SPORT);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,CardDBSchema.CardTable.Themes.THEME_SPORT);
-          //  b.putString("card", CardDBSchema.CardTable.Themes.THEME_SPORT); //Your id
-           // intent.putExtras(b);
-           // startActivity(intent);
+
         } else if (id == R.id.family_relationship) {
             mAdapter.clear();
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
         } else if (id == R.id.order_of_day) {
             mAdapter.clear();
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
-           // b.putString("card", CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY); //Your id
-            //   intent.putExtras(b);
-           // startActivity(intent);
+
         } else if (id == R.id.hobbies_free_time) {
             mAdapter.clear();
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
 
-          //  b.putString("card", CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME); //Your id
-          //  intent.putExtras(b);
-          //  startActivity(intent);
         } else if (id == R.id.customs_traditions) {
             mAdapter.clear();
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
-
-           // b.putString("card", CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS); //Your id
-           // intent.putExtras(b);
-           // startActivity(intent);
         } else if (id == R.id.shopping) {
             mAdapter.clear();
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_SHOPPING);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,CardDBSchema.CardTable.Themes.THEME_SHOPPING);
-
-           // b.putString("card", CardDBSchema.CardTable.Themes.THEME_SHOPPING); //Your id
-           // intent.putExtras(b);
-           // startActivity(intent);
         } else if (id == R.id.food_drinks) {
             mAdapter.clear();
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListActivityByTheme.this,3);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerCardsListByThemeActivity.this,3);
             mCardRecyclerView.setLayoutManager(gridLayoutManager);
             downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
             addOnScrollListener(mCardRecyclerView,gridLayoutManager,CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
-
-            //b.putString("card", CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS); //Your id
-           // intent.putExtras(b);
-            //startActivity(intent);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void addOnScrollListener(RecyclerView recyclerView, GridLayoutManager gridLayoutManager, String theme){
+    private void addOnScrollListener(RecyclerView recyclerView, GridLayoutManager gridLayoutManager, final String theme){
         recyclerView.addOnScrollListener(new PaginationScrollListener(gridLayoutManager) {
             @Override
             protected void loadMoreItems() {

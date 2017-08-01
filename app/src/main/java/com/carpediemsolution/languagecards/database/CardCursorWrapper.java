@@ -3,7 +3,7 @@ package com.carpediemsolution.languagecards.database;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 import com.carpediemsolution.languagecards.database.CardDBSchema.CardTable;
-import com.carpediemsolution.languagecards.Card;
+import com.carpediemsolution.languagecards.model.Card;
 
 
 /**

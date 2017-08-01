@@ -1,4 +1,4 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.notification;
 
 
 import android.support.v7.widget.GridLayoutManager;

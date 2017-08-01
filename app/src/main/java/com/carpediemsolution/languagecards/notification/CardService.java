@@ -11,9 +11,9 @@ import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.carpediemsolution.languagecards.Card;
-import com.carpediemsolution.languagecards.CardLab;
-import com.carpediemsolution.languagecards.CardsMainActivity;
+import com.carpediemsolution.languagecards.model.Card;
+import com.carpediemsolution.languagecards.dao.CardLab;
+import com.carpediemsolution.languagecards.activity.CardsMainActivity;
 import com.carpediemsolution.languagecards.R;
 
 import java.util.List;

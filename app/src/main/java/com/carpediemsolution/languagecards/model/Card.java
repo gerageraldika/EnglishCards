@@ -1,4 +1,4 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -1,4 +1,4 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.activity;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -11,6 +11,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.carpediemsolution.languagecards.model.Card;
+import com.carpediemsolution.languagecards.dao.CardLab;
+import com.carpediemsolution.languagecards.R;
+import com.carpediemsolution.languagecards.model.User;
 import com.carpediemsolution.languagecards.api.UserCardsToServerAPI;
 import java.io.IOException;
 import java.util.List;
@@ -80,7 +85,7 @@ public class AuthorizedPersonActivity extends Activity {
 
     private void sendUserCards() {
 
-        SharedPreferences prefs = PreferenceManager
+        final SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(AuthorizedPersonActivity.this);
 
         String token = prefs.getString("Token", "");
@@ -98,7 +103,7 @@ public class AuthorizedPersonActivity extends Activity {
                     try {
                         String s = response.body().string();
                         if (s.equals("cards added")) {
-                            prefs.edit().remove("Token").commit();
+                            prefs.edit().remove("Token").apply();
                             CardLab.get(AuthorizedPersonActivity.this).deleteAllCards();
                             CardLab.get(AuthorizedPersonActivity.this).deleteUser();
                             Intent intent = new Intent(AuthorizedPersonActivity.this, CardsMainActivity.class);
@@ -128,7 +133,6 @@ public class AuthorizedPersonActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 sendUserCards();
-                return;
             }
         }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override

@@ -25,7 +25,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.carpediemsolution.languagecards.CardsMainActivity"
+            android:name="com.carpediemsolution.languagecards.activity.CardsMainActivity"
             android:label="Language Cards"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -35,60 +35,60 @@
         </activity>
 
         <activity
-            android:name="com.carpediemsolution.languagecards.InsertNewCardActivity"
+            android:name="com.carpediemsolution.languagecards.activity.InsertNewCardActivity"
             android:label=" "
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
-            android:name="com.carpediemsolution.languagecards.ServerCardsListActivity"
+            android:name="com.carpediemsolution.languagecards.activity.ServerCardsListActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
-            android:name="com.carpediemsolution.languagecards.ServerCardsListActivityByTheme"
+            android:name="com.carpediemsolution.languagecards.activity.ServerCardsListByThemeActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
-            android:name="com.carpediemsolution.languagecards.LoginActivity"
+            android:name="com.carpediemsolution.languagecards.activity.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
-            android:name="com.carpediemsolution.languagecards.AuthorizedPersonActivity"
+            android:name="com.carpediemsolution.languagecards.activity.AuthorizedPersonActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>AuthorizedPersonActivity
 
         <activity
-            android:name="com.carpediemsolution.languagecards.SignupActivity"
+            android:name="com.carpediemsolution.languagecards.activity.SignupActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
-            android:name="com.carpediemsolution.languagecards.EditCardActivity"
+            android:name="com.carpediemsolution.languagecards.activity.EditCardActivity"
             android:label=" "
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
-            android:name="com.carpediemsolution.languagecards.PasswordSenderActivity"
+            android:name="com.carpediemsolution.languagecards.activity.PasswordSenderActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
-            android:name="com.carpediemsolution.languagecards.InformationActivity"
+            android:name="com.carpediemsolution.languagecards.activity.InformationActivity"
             android:label="About App"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
-            android:name="com.carpediemsolution.languagecards.CardsSyncActivity"
+            android:name="com.carpediemsolution.languagecards.activity.CardsSyncActivity"
             android:label="Sync Data"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

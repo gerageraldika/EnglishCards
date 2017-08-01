@@ -1,4 +1,4 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,7 +7,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -23,6 +22,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.carpediemsolution.languagecards.model.Card;
+import com.carpediemsolution.languagecards.dao.CardLab;
+import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.api.API;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
 import com.carpediemsolution.languagecards.pagination.PaginationScrollListener;
@@ -40,6 +43,7 @@ import retrofit2.Response;
 public class ServerCardsListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String LOG_TAG = "ServerListActivity";
+
     private ProgressBar progressBar;
     private RecyclerView mCardRecyclerView;
     private ServerCardsAdapter mAdapter;
@@ -48,17 +52,18 @@ public class ServerCardsListActivity extends AppCompatActivity implements Naviga
     private boolean isLastPage = false;
     private int TOTAL_PAGES = 10;
     private int currentPage = PAGE_START;
-    private List<Card> cardList;
+   // private List<Card> cardList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cards_server);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.parseColor("#558B2F"));
         setSupportActionBar(toolbar);
-        setSupportActionBar(toolbar);
+
         progressBar = (ProgressBar) findViewById(R.id.server_cards_loading_progress);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#558B2F"), PorterDuff.Mode.SRC_IN);
 
@@ -123,7 +128,7 @@ public class ServerCardsListActivity extends AppCompatActivity implements Naviga
                 isLoading = false;
                 if (response.isSuccessful()) {
                     try {
-                        List <Card> cards = new ArrayList<Card>();
+                        List <Card> cards = new ArrayList<>();
                         cards.addAll(response.body());
                         for (Card card:cards)
                         Log.d(LOG_TAG, "word " + card.getWord() + "desc " + card.getDescription());
@@ -174,7 +179,7 @@ public class ServerCardsListActivity extends AppCompatActivity implements Naviga
                     getDefaultSharedPreferences(ServerCardsListActivity.this);
             String token = prefs.getString("Token", "");
             Log.d(LOG_TAG, "---token " + token);
-            if (token == "") {
+            if (token.equals("")) {
                 Intent intent = new Intent(ServerCardsListActivity.this, LoginActivity.class);
                 startActivity(intent);
             } else {
@@ -200,7 +205,7 @@ public class ServerCardsListActivity extends AppCompatActivity implements Naviga
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-        Intent intent = new Intent(ServerCardsListActivity.this, ServerCardsListActivityByTheme.class);
+        Intent intent = new Intent(ServerCardsListActivity.this, ServerCardsListByThemeActivity.class);
         Bundle b = new Bundle();
         if (id == R.id.all_items) {
             Intent intentAll = new Intent(ServerCardsListActivity.this,ServerCardsListActivity.class);

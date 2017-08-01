@@ -1,6 +1,6 @@
 package com.carpediemsolution.languagecards.api;
 
-import com.carpediemsolution.languagecards.Card;
+import com.carpediemsolution.languagecards.model.Card;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

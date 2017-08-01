@@ -1,7 +1,8 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.UIUtils;
 
 import android.text.InputFilter;
 
+import com.carpediemsolution.languagecards.model.Card;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
 
 import java.util.regex.Matcher;
@@ -65,8 +66,6 @@ public class CardUI {
         boolean isValid = false;
 
        // String expression = "*[[][]]+@[A-Z,А-Я]{1,}$";
-        CharSequence inputStr = email;
-
        // Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
       //  Matcher matcher = pattern.matcher(inputStr);
       //  if (matcher.matches()) {

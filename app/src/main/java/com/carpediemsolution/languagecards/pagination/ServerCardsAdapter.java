@@ -14,9 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.carpediemsolution.languagecards.Card;
-import com.carpediemsolution.languagecards.CardLab;
-import com.carpediemsolution.languagecards.CardUI;
+import com.carpediemsolution.languagecards.model.Card;
+import com.carpediemsolution.languagecards.dao.CardLab;
+import com.carpediemsolution.languagecards.UIUtils.CardUI;
 import com.carpediemsolution.languagecards.R;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;

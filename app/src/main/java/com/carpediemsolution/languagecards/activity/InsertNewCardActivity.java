@@ -1,4 +1,4 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -21,6 +20,11 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.carpediemsolution.languagecards.model.Card;
+import com.carpediemsolution.languagecards.dao.CardLab;
+import com.carpediemsolution.languagecards.UIUtils.CardUI;
+import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.api.FileUploadService;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
 import com.google.android.gms.ads.AdListener;
@@ -37,10 +41,11 @@ import retrofit2.Retrofit;
 public class InsertNewCardActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "InsertActivity";
+    private Toolbar toolbarTheme;
     private EditText editWord;
     private EditText editTranslate;
     private EditText editDescription;
-    Card mCard;
+    private Card mCard;
     private InterstitialAd interstitial;
 
     @Override
@@ -48,7 +53,7 @@ public class InsertNewCardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_new_card);
 
-        Toolbar toolbarTheme = (Toolbar) findViewById(R.id.toolbar_card_theme);
+        toolbarTheme = (Toolbar) findViewById(R.id.toolbar_card_theme);
         setSupportActionBar(toolbarTheme);
 
         mCard = new Card();
@@ -198,12 +203,12 @@ public class InsertNewCardActivity extends AppCompatActivity {
 
             String token = prefs.getString("Token", "");
 
-            if (token == "") {
+            if (token.equals("")) {
                 token = prefs.getString("AnonToken", "");
 
-                if (token == "") {
+                if (token.equals("")) {
                     token = "anonym " + new Date().toString();
-                    prefs.edit().putString("AnonToken", token).commit();
+                    prefs.edit().putString("AnonToken", token).apply();
                 }
             }
             Log.d(LOG_TAG, "---token " + " -" + token + "- ");

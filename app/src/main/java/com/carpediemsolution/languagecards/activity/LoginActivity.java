@@ -1,4 +1,4 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.activity;
 
 
 import android.app.Activity;
@@ -19,6 +19,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.carpediemsolution.languagecards.model.Card;
+import com.carpediemsolution.languagecards.dao.CardLab;
+import com.carpediemsolution.languagecards.UIUtils.CardUI;
+import com.carpediemsolution.languagecards.R;
+import com.carpediemsolution.languagecards.model.User;
 import com.carpediemsolution.languagecards.api.UserAPI;
 import com.carpediemsolution.languagecards.api.UserCardsFromServerAPI;
 
@@ -110,10 +115,10 @@ public class LoginActivity extends Activity {
     }
 
     private void toLoginUser(){
-            SharedPreferences prefs = PreferenceManager
+            final SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(LoginActivity.this);
 
-            Retrofit client = CardLab.get(LoginActivity.this).getRetfofitClient();
+            final Retrofit client = CardLab.get(LoginActivity.this).getRetfofitClient();
             UserAPI serviceUpload = client.create(UserAPI.class);
             Call<ResponseBody> callPost = serviceUpload.getUserToken(user);
              progressBar.setVisibility(View.VISIBLE);
@@ -127,8 +132,8 @@ public class LoginActivity extends Activity {
                             String s = response.body().string();
 
                             if (s != null){
-                            prefs.edit().putString("Token", s).commit();
-                            prefs.edit().remove("AnonToken").commit();
+                            prefs.edit().putString("Token", s).apply();
+                            prefs.edit().remove("AnonToken").apply();
                             CardLab.get(LoginActivity.this).addUser(user);
                             getUsersCards(client, s);}
 
@@ -153,10 +158,9 @@ public class LoginActivity extends Activity {
                             Toast.LENGTH_SHORT).show();
                     Log.d(LOG_TAG, "---RESULT FAILED " + call.toString() + "---");}
             });
-
     }
 
-    public void getUsersCards(Retrofit client, String token) {
+    public void getUsersCards(Retrofit client, final String token) {
 
         List<Card> anonCards = CardLab.get(LoginActivity.this).getCards();
         UserCardsFromServerAPI serviceUploadCards = client.create(UserCardsFromServerAPI.class);

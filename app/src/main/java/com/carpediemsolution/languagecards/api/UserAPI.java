@@ -1,6 +1,6 @@
 package com.carpediemsolution.languagecards.api;
 
-import com.carpediemsolution.languagecards.User;
+import com.carpediemsolution.languagecards.model.User;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

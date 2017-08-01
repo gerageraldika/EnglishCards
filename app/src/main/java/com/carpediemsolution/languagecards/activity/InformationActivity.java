@@ -1,10 +1,12 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
+
+import com.carpediemsolution.languagecards.R;
 
 import org.w3c.dom.Text;
 

@@ -1,9 +1,8 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
@@ -18,6 +17,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.carpediemsolution.languagecards.dao.CardLab;
+import com.carpediemsolution.languagecards.UIUtils.CardUI;
+import com.carpediemsolution.languagecards.R;
+import com.carpediemsolution.languagecards.model.User;
 import com.carpediemsolution.languagecards.api.UserRegistrationAPI;
 
 import java.io.IOException;
@@ -38,9 +41,9 @@ public class SignupActivity extends Activity {
     private AutoCompleteTextView usernameTextView;
     private EditText passwordTextView;
     private TextView userExistsTextView;
-    private EditText repeatpasswordView;
+    private EditText repeatedPasswordView;
     private Button loginButton;
-    private AutoCompleteTextView useremailTextView;
+    private AutoCompleteTextView userEmailTextView;
     private String repeatPassword = "1";
     final User user = new User();
     private ProgressBar progressBar;
@@ -69,9 +72,9 @@ public class SignupActivity extends Activity {
             }
         });
 
-        useremailTextView = (AutoCompleteTextView) findViewById(R.id.useremail);
-        useremailTextView.setFilters(CardUI.setSizeForUserEmailEditText());
-        useremailTextView.addTextChangedListener(new TextWatcher() {
+        userEmailTextView = (AutoCompleteTextView) findViewById(R.id.useremail);
+        userEmailTextView.setFilters(CardUI.setSizeForUserEmailEditText());
+        userEmailTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -103,9 +106,9 @@ public class SignupActivity extends Activity {
             }
         });
 
-        repeatpasswordView = (EditText) findViewById(R.id.repeat_password);
-        repeatpasswordView.setFilters(CardUI.setSizeForUserEditText());
-        repeatpasswordView.addTextChangedListener(new TextWatcher() {
+        repeatedPasswordView = (EditText) findViewById(R.id.repeat_password);
+        repeatedPasswordView.setFilters(CardUI.setSizeForUserEditText());
+        repeatedPasswordView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -125,7 +128,7 @@ public class SignupActivity extends Activity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                repeatPassword = repeatpasswordView.getText().toString();
+                repeatPassword = repeatedPasswordView.getText().toString();
                 Log.d(LOG_TAG, "---RepeatPassword" + repeatPassword);
 
                 if (TextUtils.isEmpty(usernameTextView.getText())) {
@@ -133,10 +136,10 @@ public class SignupActivity extends Activity {
                 } else if (TextUtils.isEmpty(passwordTextView.getText())) {
                     passwordTextView.setError("Null");
                 } else if (!CardUI.isEmailValid(user.getEmail())) {
-                    useremailTextView.setError("Invalid format");
+                    userEmailTextView.setError("Invalid format");
                 } else if (!repeatPassword.equals(user.getPassword())) {
                     passwordTextView.setError("");
-                    repeatpasswordView.setError("");
+                    repeatedPasswordView.setError("");
                     Toast.makeText(SignupActivity.this, "passwords are not equal ",
                             Toast.LENGTH_SHORT).show();
                 } else {

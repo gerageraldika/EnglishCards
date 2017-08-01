@@ -1,4 +1,4 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,6 +14,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.carpediemsolution.languagecards.dao.CardLab;
+import com.carpediemsolution.languagecards.UIUtils.CardUI;
+import com.carpediemsolution.languagecards.R;
+import com.carpediemsolution.languagecards.model.User;
 import com.carpediemsolution.languagecards.api.PasswordSenderAPI;
 
 import java.io.IOException;
@@ -36,7 +41,7 @@ public class PasswordSenderActivity extends Activity implements View.OnClickList
     private TextView passwordsendTextView;
     private ProgressBar progressBar;
     private static final String LOG_TAG = "PasswordSenderActivity";
-    User user;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +114,7 @@ public class PasswordSenderActivity extends Activity implements View.OnClickList
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
                         (PasswordSenderActivity.this);
                 String token = prefs.getString("Token", "");
-                if (token != "") {
+                if (!token.equals("")) {
                     User user = CardLab.get(PasswordSenderActivity.this).getUser();
                     Toast.makeText(PasswordSenderActivity.this, user.getUsername() + ", вы уже авторизированы в системе ",
                         Toast.LENGTH_SHORT).show();}

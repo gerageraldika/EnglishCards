@@ -1,4 +1,4 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.model;
 
 /**
  * Created by Юлия on 16.04.2017.

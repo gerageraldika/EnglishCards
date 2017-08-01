@@ -1,4 +1,4 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.util.Log;
 import com.carpediemsolution.languagecards.database.CardBaseHelper;
 import com.carpediemsolution.languagecards.database.CardCursorWrapper;
 import com.carpediemsolution.languagecards.database.CardDBSchema.CardTable;
+import com.carpediemsolution.languagecards.model.Card;
+import com.carpediemsolution.languagecards.model.User;
 
 import java.util.ArrayList;
 import java.util.Collections;

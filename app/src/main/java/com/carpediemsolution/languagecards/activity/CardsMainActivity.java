@@ -1,4 +1,4 @@
-package com.carpediemsolution.languagecards;
+package com.carpediemsolution.languagecards.activity;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
@@ -28,12 +29,22 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.carpediemsolution.languagecards.model.Card;
+import com.carpediemsolution.languagecards.dao.CardLab;
+import com.carpediemsolution.languagecards.UIUtils.CardUI;
+import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.api.UserCardToDeleteAPI;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
 import com.carpediemsolution.languagecards.notification.CardReceiver;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,31 +57,33 @@ public class CardsMainActivity extends AppCompatActivity
 
     private static final String LOG_TAG = "MainActivity";
     private static final String TAG = "Notification";
+
+    @BindView(R.id.card_recycler_view)
+    RecyclerView cardRecyclerView;
     private CardAdapter mAdapter;
-    private RecyclerView mCardRecyclerView;
-    public AlarmManager alarmManager;
-    Intent alarmIntent;
-    PendingIntent pendingIntent;
-    List<Card> mCards;
-    Card mCard;
+
+    private List<Card> mCards;
+    private Card mCard;
+    private CardLab cardsLab;
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
+    @OnClick(R.id.fab)
+    public void onClick() {
+        Intent intent = new Intent(CardsMainActivity.this, InsertNewCardActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cards_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.parseColor("#558B2F"));
         setSupportActionBar(toolbar);
-        CardLab cardrLab = CardLab.get(CardsMainActivity.this);
-
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(CardsMainActivity.this, InsertNewCardActivity.class);
-                startActivity(intent);
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -93,10 +106,9 @@ public class CardsMainActivity extends AppCompatActivity
             }
         });
 
-        mCards = cardrLab.getCards();
-
-        mCardRecyclerView = (RecyclerView) findViewById(R.id.card_recycler_view);
-        mCardRecyclerView.setLayoutManager(new GridLayoutManager(CardsMainActivity.this, 3));
+        cardsLab = CardLab.get(CardsMainActivity.this);
+        mCards = cardsLab.getCards();
+        cardRecyclerView.setLayoutManager(new GridLayoutManager(CardsMainActivity.this, 3));
         updateUI();
 
        setAlarm();
@@ -104,8 +116,7 @@ public class CardsMainActivity extends AppCompatActivity
 
     private void updateUI() {
         mAdapter = new CardAdapter();
-
-        mCardRecyclerView.setAdapter(mAdapter);
+        cardRecyclerView.setAdapter(mAdapter);
         mAdapter.setCards(mCards);
         mAdapter.notifyDataSetChanged();
     }
@@ -128,15 +139,15 @@ public class CardsMainActivity extends AppCompatActivity
 
     private class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private Card mCardItem;
-        CardLab cardrLab = CardLab.get(CardsMainActivity.this);
-        List<Card> mCardItems = cardrLab.getCards();
+
+        List<Card> mCardItems = new ArrayList<>();
         private static final int EMPTY_VIEW = 10;
 
         private TextView mWordTextView;
-        ImageView imageView;
+        private ImageView imageView;
 
-        public class EmptyViewHolder extends RecyclerView.ViewHolder {
-            public EmptyViewHolder(View itemView) {
+        private class EmptyViewHolder extends RecyclerView.ViewHolder {
+            private EmptyViewHolder(View itemView) {
                 super(itemView);
                 Log.d(LOG_TAG, "----" + "empty holder view");
             }
@@ -145,7 +156,7 @@ public class CardsMainActivity extends AppCompatActivity
         private class CardHolder extends RecyclerView.ViewHolder
                 implements View.OnLongClickListener, View.OnClickListener {
 
-            public CardHolder(View itemView) {
+            private CardHolder(View itemView) {
                 super(itemView);
                 itemView.setOnLongClickListener(this);
                 itemView.setOnClickListener(this);
@@ -249,11 +260,11 @@ public class CardsMainActivity extends AppCompatActivity
         }
 
         if (id == R.id.action_line) {
-            mCardRecyclerView.setLayoutManager(new GridLayoutManager(CardsMainActivity.this, 1));
+            cardRecyclerView.setLayoutManager(new GridLayoutManager(CardsMainActivity.this, 1));
             updateUI();
         }
         if (id == R.id.action_frame) {
-            mCardRecyclerView.setLayoutManager(new GridLayoutManager(CardsMainActivity.this, 3));
+            cardRecyclerView.setLayoutManager(new GridLayoutManager(CardsMainActivity.this, 3));
             updateUI();
         }
         if (id == R.id.action_settings) {
@@ -285,7 +296,7 @@ public class CardsMainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         CardLab calcLab = CardLab.get(this);
 
@@ -355,7 +366,6 @@ public class CardsMainActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 openDeleteDialog(position);
-                return;
             }
         }).setNegativeButton(getString(R.string.edit), new DialogInterface.OnClickListener() {
             @Override
@@ -365,12 +375,11 @@ public class CardsMainActivity extends AppCompatActivity
                 b.putString("card", mCard.getId()); //Your id
                 intent.putExtras(b);
                 startActivity(intent);
-                return;
             }
         }).show();
     }
 
-    protected void openDeleteDialog(int position){
+    protected void openDeleteDialog(final int position){
         AlertDialog.Builder builder = new AlertDialog.Builder(CardsMainActivity.this,R.style.MyTheme_Dark_Dialog);
         builder.setMessage("Вы уверены?");
         builder.setPositiveButton(getString(R.string.remove), new DialogInterface.OnClickListener() {
@@ -380,19 +389,18 @@ public class CardsMainActivity extends AppCompatActivity
                 mAdapter.notifyItemRemoved(position);//item removed from recylcerview
                 mCard = mCards.get(position);
 
-                String uuidString = mCard.getId();
-                CardLab CardrLab = CardLab.get(CardsMainActivity.this);
+                final String uuidString = mCard.getId();
 
                 Retrofit client = CardLab.get(CardsMainActivity.this).getRetfofitClient();
                 mCards.remove(position);
                 UserCardToDeleteAPI serviceUpload = client.create(UserCardToDeleteAPI.class);
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
+                final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
                         (CardsMainActivity.this);
                 String token = prefs.getString("Token", "");
-                if (token == "") {
+                if (token.equals("")) {
                     token = prefs.getString("AnonToken", "");
-                    if (token == "") {
-                        CardrLab.get(CardsMainActivity.this).mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
+                    if (token.equals("")) {
+                        cardsLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
                                 CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
                         return;
                     }
@@ -406,7 +414,7 @@ public class CardsMainActivity extends AppCompatActivity
                                         String s = response.body().string();
                                         Log.d(LOG_TAG, "---token " + s);
                                         if (s.equals("card deleted")||s.equals("no card exists")) {
-                                            CardrLab.get(CardsMainActivity.this).mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
+                                            cardsLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
                                                     CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
                                         }
                                     } catch (IOException e) {
@@ -418,39 +426,37 @@ public class CardsMainActivity extends AppCompatActivity
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-
                                 String anontoken = prefs.getString("Token", "");
                                 Log.d(LOG_TAG, "---anontoken " + anontoken);
-                                if (anontoken == "") {
+                                if (anontoken.equals("")) {
                                     anontoken = prefs.getString("AnonToken", "");
                                     Log.d(LOG_TAG, "---anontoken " + anontoken);
-                                    if (anontoken == "") {
-                                        CardrLab.get(CardsMainActivity.this).mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
+                                    if (anontoken.equals("")) {
+                                        cardsLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
                                                 CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
                                     }
                                 } else {
                                     Toast.makeText(CardsMainActivity.this, R.string.delete_cancel,
                                             Toast.LENGTH_SHORT).show();
-                                    mCard = CardrLab.getCard(uuidString);
+                                    mCard = cardsLab.getCard(uuidString);
                                     mCards.add(mCard);
                                 }
                                 updateUI();
                             }
                         });
-                return;
             }
         }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                return;
+                dialog.dismiss();
             }
         }).show();
     }
 
     public void setAlarm() {
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmIntent = new Intent(getApplicationContext(), CardReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, alarmIntent, pendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent alarmIntent = new Intent(getApplicationContext(), CardReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar alarmStartTime = Calendar.getInstance();
 
