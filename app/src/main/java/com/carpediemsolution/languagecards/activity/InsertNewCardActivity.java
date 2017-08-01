@@ -20,23 +20,21 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
+import com.carpediemsolution.languagecards.App;
+import com.carpediemsolution.languagecards.api.WebApi;
 import com.carpediemsolution.languagecards.model.Card;
 import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.UIUtils.CardUI;
 import com.carpediemsolution.languagecards.R;
-import com.carpediemsolution.languagecards.api.FileUploadService;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-
 import java.util.Date;
 import java.util.UUID;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class InsertNewCardActivity extends AppCompatActivity {
 
@@ -195,9 +193,8 @@ public class InsertNewCardActivity extends AppCompatActivity {
         } else {
             CardLab.get(InsertNewCardActivity.this).addCard(mCard);
             Log.d(LOG_TAG, "---addCard" + mCard.getWord());
-            Retrofit client = CardLab.get(InsertNewCardActivity.this).getRetfofitClient();
 
-            FileUploadService serviceUpload = client.create(FileUploadService.class);
+            final WebApi webApi = App.getWebApi();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
                     (InsertNewCardActivity.this);
 
@@ -213,7 +210,7 @@ public class InsertNewCardActivity extends AppCompatActivity {
             }
             Log.d(LOG_TAG, "---token " + " -" + token + "- ");
 
-            Call<Card> callPost = serviceUpload.uploadCards(token, mCard);
+            Call<Card> callPost = webApi.uploadCards(token, mCard);
             callPost.enqueue(new Callback<Card>() {
                 @Override
                 public void onResponse(Call<Card> call, Response<Card> response) {

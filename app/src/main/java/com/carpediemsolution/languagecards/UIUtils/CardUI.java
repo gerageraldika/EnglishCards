@@ -1,10 +1,8 @@
 package com.carpediemsolution.languagecards.UIUtils;
 
 import android.text.InputFilter;
-
 import com.carpediemsolution.languagecards.model.Card;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

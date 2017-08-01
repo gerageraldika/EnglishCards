@@ -15,11 +15,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.carpediemsolution.languagecards.App;
+import com.carpediemsolution.languagecards.api.WebApi;
 import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.UIUtils.CardUI;
 import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.model.User;
-import com.carpediemsolution.languagecards.api.PasswordSenderAPI;
 
 import java.io.IOException;
 
@@ -27,7 +28,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
+
 
 
 /**
@@ -127,9 +128,8 @@ public class PasswordSenderActivity extends Activity implements View.OnClickList
     }
 
             private void sendPasswordToEmail() {
-                Retrofit client = CardLab.get(PasswordSenderActivity.this).getRetfofitClient();
-                PasswordSenderAPI serviceUpload = client.create(PasswordSenderAPI.class);
-                Call<ResponseBody> callPost = serviceUpload.getUserPassword(user);
+                final WebApi webApi = App.getWebApi();
+                Call<ResponseBody> callPost = webApi.getUserPassword(user);
                 progressBar.setVisibility(View.VISIBLE);
                 callPost.enqueue(new Callback<ResponseBody>() {
                     @Override

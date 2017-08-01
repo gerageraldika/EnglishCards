@@ -17,11 +17,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.carpediemsolution.languagecards.App;
+import com.carpediemsolution.languagecards.api.WebApi;
 import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.UIUtils.CardUI;
 import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.model.User;
-import com.carpediemsolution.languagecards.api.UserRegistrationAPI;
 
 import java.io.IOException;
 
@@ -29,7 +30,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
+
 
 /**
  * Created by Юлия on 25.03.2017.
@@ -154,10 +155,8 @@ public class SignupActivity extends Activity {
     }
 
     private void toSignUpUser() {
-        Retrofit client = CardLab.get(SignupActivity.this).getRetfofitClient();
-
-        UserRegistrationAPI serviceUpload = client.create(UserRegistrationAPI.class);
-        Call<ResponseBody> callPost = serviceUpload.loadUser(user);
+        final WebApi webApi = App.getWebApi();
+        Call<ResponseBody> callPost = webApi.loadUser(user);
         progressBar.setVisibility(View.VISIBLE);
         callPost.enqueue(new Callback<ResponseBody>() {
             @Override

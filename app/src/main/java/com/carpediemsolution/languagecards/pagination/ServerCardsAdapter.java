@@ -32,7 +32,7 @@ import java.util.UUID;
  * Created by Юлия on 17.05.2017.
  */
 
-public class ServerCardsAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ServerCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Card> cards;
     private Card mCard;
 
@@ -87,20 +87,19 @@ public class ServerCardsAdapter  extends RecyclerView.Adapter<RecyclerView.ViewH
         switch (getItemViewType(position)) {
             case ITEM:
                 final ViewHolder viewHolder = (ViewHolder) holder;
-                if(card.getPerson_id()==1){
+                if (card.getPerson_id() == 1) {
                     viewHolder.mWordTextView.setTextColor(Color.parseColor("#37474F"));
                     viewHolder.mWordTextView.setText(card.getWord());
-                }
-                else if(card.getPerson_id()==0){
+                } else if (card.getPerson_id() == 0) {
                     viewHolder.mWordTextView.setText(card.getTranslate());
                     viewHolder.mWordTextView.setTextColor(Color.parseColor("#558B2F"));
                 }
 
                 //  Log.d(LOG_TAG, "---description " + card.getDescription());
                 if (card.getDescription() != null) {
-                        viewHolder.imageView.setImageResource(R.drawable.ic_action_description);
+                    viewHolder.imageView.setImageResource(R.drawable.ic_action_description);
                     viewHolder.imageView.setVisibility(View.VISIBLE);
-                    } else viewHolder.imageView.setVisibility(View.INVISIBLE);
+                } else viewHolder.imageView.setVisibility(View.INVISIBLE);
 
                 break;
             case LOADING:
@@ -108,12 +107,12 @@ public class ServerCardsAdapter  extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-        @Override
-        public int getItemCount () {
-            if (cards == null)
-                return 0;
-            return cards.size();
-        }
+    @Override
+    public int getItemCount() {
+        if (cards == null)
+            return 0;
+        return cards.size();
+    }
 
     @Override
     public int getItemViewType(int position) {
@@ -122,7 +121,7 @@ public class ServerCardsAdapter  extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void add(Card card) {
         cards.add(card);
-       // notifyItemInserted(cards.size() - 1);
+        // notifyItemInserted(cards.size() - 1);
         notifyItemInserted(cards.size());
     }
 
@@ -183,7 +182,7 @@ public class ServerCardsAdapter  extends RecyclerView.Adapter<RecyclerView.ViewH
         public ViewHolder(View itemView) {
             super(itemView);
             mWordTextView = (TextView) itemView.findViewById(R.id.list_item__word_text_view);
-            imageView = (ImageView)itemView.findViewById(R.id.image_for_description);
+            imageView = (ImageView) itemView.findViewById(R.id.image_for_description);
             imageView.setVisibility(View.INVISIBLE);
 
             itemView.setOnClickListener(this);
@@ -210,10 +209,11 @@ public class ServerCardsAdapter  extends RecyclerView.Adapter<RecyclerView.ViewH
         @Override
         public boolean onLongClick(View v) {
             int position = getAdapterPosition();
-            showCardDescription(position,context);
+            showCardDescription(position, context);
             return false;
         }
     }
+
     protected class LoadingVH extends RecyclerView.ViewHolder {
 
         public LoadingVH(View itemView) {
@@ -228,7 +228,7 @@ public class ServerCardsAdapter  extends RecyclerView.Adapter<RecyclerView.ViewH
         interstitial.loadAd(adRequest);
     }
 
-    public void addCard(Card mCard){
+    public void addCard(Card mCard) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
                 (context);
         String token = prefs.getString("Token", "");
@@ -264,13 +264,13 @@ public class ServerCardsAdapter  extends RecyclerView.Adapter<RecyclerView.ViewH
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MyTheme_Dark_Dialog);
         String dialogMessage = CardUI.dialogMessage(mCard);
         builder.setTitle(mCard.getWord() + " ~ " + CardUI.returnTheme(mCard))
-                .setMessage(mCard.getTranslate()+ "\n\n" +dialogMessage)
+                .setMessage(mCard.getTranslate() + "\n\n" + dialogMessage)
                 .setPositiveButton(context.getString(R.string.add_card), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (interstitial.isLoaded()) {
-                            interstitial.show();}
-                        else {
+                            interstitial.show();
+                        } else {
                             addCard(mCard);
                         }
                     }

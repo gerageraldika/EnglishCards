@@ -24,10 +24,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.carpediemsolution.languagecards.App;
+import com.carpediemsolution.languagecards.api.WebApi;
 import com.carpediemsolution.languagecards.model.Card;
-import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.R;
-import com.carpediemsolution.languagecards.api.CardsThemeAPI;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
 import com.carpediemsolution.languagecards.pagination.PaginationScrollListener;
 import com.carpediemsolution.languagecards.pagination.ServerCardsAdapter;
@@ -90,8 +90,8 @@ public class ServerCardsListByThemeActivity extends AppCompatActivity implements
 
     private void downloadAllCardsFirstTime(String theme)  {
 
-        CardsThemeAPI service = CardLab.get(ServerCardsListByThemeActivity.this).getRetfofitClient().create(CardsThemeAPI.class);
-        Call<List<Card>> call = service.getCardsByTheme(theme);
+        final WebApi webApi = App.getWebApi();
+        Call<List<Card>> call = webApi.getCardsByTheme(theme);
         progressBar.setVisibility(View.VISIBLE);
         call.enqueue(new Callback<List<Card>>() {
             @Override
@@ -120,8 +120,8 @@ public class ServerCardsListByThemeActivity extends AppCompatActivity implements
     }
 
     private void downloadAllCardsNextTime(String theme) {
-        CardsThemeAPI service = CardLab.get(ServerCardsListByThemeActivity.this).getRetfofitClient().create(CardsThemeAPI.class);
-        Call<List<Card>> call = service.getCardsByTheme(theme);
+        final WebApi webApi = App.getWebApi();
+        Call<List<Card>> call = webApi.getCardsByTheme(theme);
         progressBar.setVisibility(View.VISIBLE);
         call.enqueue(new Callback<List<Card>>() {
             @Override

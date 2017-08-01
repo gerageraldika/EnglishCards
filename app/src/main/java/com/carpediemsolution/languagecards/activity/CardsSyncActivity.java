@@ -10,18 +10,17 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.carpediemsolution.languagecards.App;
+import com.carpediemsolution.languagecards.api.WebApi;
 import com.carpediemsolution.languagecards.model.Card;
 import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.R;
-import com.carpediemsolution.languagecards.api.UserCardsToServerAPI;
 import java.io.IOException;
 import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 /**
  * Created by Юлия on 04.05.2017.
@@ -73,9 +72,8 @@ public class CardsSyncActivity extends Activity {
                 .getDefaultSharedPreferences(CardsSyncActivity.this);
         String token = prefs.getString("Token", "");
 
-        Retrofit client = CardLab.get(CardsSyncActivity.this).getRetfofitClient();
-        UserCardsToServerAPI serviceUpload = client.create(UserCardsToServerAPI.class);
-        Call<ResponseBody> callPost = serviceUpload.postAllCardsToServer(token, userCards);
+        final WebApi webApi = App.getWebApi();
+        Call<ResponseBody> callPost = webApi.postAllCardsToServer(token, userCards);
         progressBar.setVisibility(View.VISIBLE);
         callPost.enqueue(new Callback<ResponseBody>() {
             @Override

@@ -46,10 +46,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
     //admob
     compile 'com.google.firebase:firebase-ads:10.0.1'
-    //leakcanary
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

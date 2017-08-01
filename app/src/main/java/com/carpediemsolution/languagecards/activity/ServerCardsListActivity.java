@@ -23,10 +23,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.carpediemsolution.languagecards.App;
 import com.carpediemsolution.languagecards.model.Card;
-import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.R;
-import com.carpediemsolution.languagecards.api.API;
+import com.carpediemsolution.languagecards.api.WebApi;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
 import com.carpediemsolution.languagecards.pagination.PaginationScrollListener;
 import com.carpediemsolution.languagecards.pagination.ServerCardsAdapter;
@@ -88,8 +88,8 @@ public class ServerCardsListActivity extends AppCompatActivity implements Naviga
     }
 
     private void downloadAllCardsFirstTime()  {
-        API service = CardLab.get(ServerCardsListActivity.this).getRetfofitClient().create(API.class);
-        Call<List<Card>> call = service.getCards();
+        final WebApi webApi = App.getWebApi();
+        Call<List<Card>> call = webApi.getCards();
         progressBar.setVisibility(View.VISIBLE);
 
         call.enqueue(new Callback<List<Card>>() {
@@ -116,8 +116,8 @@ public class ServerCardsListActivity extends AppCompatActivity implements Naviga
     }
 
     private void downloadAllCardsNextTime() {
-        API service = CardLab.get(ServerCardsListActivity.this).getRetfofitClient().create(API.class);
-        Call<List<Card>> call = service.getCards();
+        final WebApi webApi = App.getWebApi();
+        Call<List<Card>> call = webApi.getCards();
         progressBar.setVisibility(View.VISIBLE);
         call.enqueue(new Callback<List<Card>>() {
             @Override

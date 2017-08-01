@@ -29,19 +29,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.carpediemsolution.languagecards.App;
+import com.carpediemsolution.languagecards.api.WebApi;
 import com.carpediemsolution.languagecards.model.Card;
 import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.UIUtils.CardUI;
 import com.carpediemsolution.languagecards.R;
-import com.carpediemsolution.languagecards.api.UserCardToDeleteAPI;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
 import com.carpediemsolution.languagecards.notification.CardReceiver;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -49,7 +48,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 
 public class CardsMainActivity extends AppCompatActivity
@@ -81,7 +79,7 @@ public class CardsMainActivity extends AppCompatActivity
         setContentView(R.layout.activity_cards_main);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.parseColor("#558B2F"));
         setSupportActionBar(toolbar);
 
@@ -111,7 +109,7 @@ public class CardsMainActivity extends AppCompatActivity
         cardRecyclerView.setLayoutManager(new GridLayoutManager(CardsMainActivity.this, 3));
         updateUI();
 
-       setAlarm();
+        setAlarm();
     }
 
     private void updateUI() {
@@ -133,7 +131,7 @@ public class CardsMainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-          super.onBackPressed();
+            super.onBackPressed();
         }
     }
 
@@ -161,7 +159,7 @@ public class CardsMainActivity extends AppCompatActivity
                 itemView.setOnLongClickListener(this);
                 itemView.setOnClickListener(this);
                 mWordTextView = (TextView) itemView.findViewById(R.id.list_item__word_text_view);
-                imageView = (ImageView)itemView.findViewById(R.id.image_for_description);
+                imageView = (ImageView) itemView.findViewById(R.id.image_for_description);
             }
 
             @Override
@@ -179,11 +177,10 @@ public class CardsMainActivity extends AppCompatActivity
                 mCardItem = mCardItems.get(position);
                 mWordTextView = (TextView) itemView.findViewById(R.id.list_item__word_text_view);
 
-                if(mWordTextView.getText().equals(mCardItem.getWord())){
+                if (mWordTextView.getText().equals(mCardItem.getWord())) {
                     mWordTextView.setText(mCardItem.getTranslate());
                     mWordTextView.setTextColor(Color.parseColor("#558B2F"));
-                }
-                else if(mWordTextView.getText().equals(mCardItem.getTranslate())){
+                } else if (mWordTextView.getText().equals(mCardItem.getTranslate())) {
                     mWordTextView.setText(mCardItem.getWord());
                     mWordTextView.setTextColor(Color.parseColor("#37474F"));
                 }
@@ -232,9 +229,9 @@ public class CardsMainActivity extends AppCompatActivity
                 mCardItem = mCardItems.get(position);
                 Log.d(LOG_TAG, "----" + "onCreateHolder" + mCardItem.getWord());
                 mWordTextView.setText(mCardItem.getWord());
-                if(mCardItem.getDescription() != null){
-                    if(!mCardItem.getDescription().equals(""))
-                    imageView.setImageResource(R.drawable.ic_action_description);
+                if (mCardItem.getDescription() != null) {
+                    if (!mCardItem.getDescription().equals(""))
+                        imageView.setImageResource(R.drawable.ic_action_description);
                 }
             }
         }
@@ -251,11 +248,11 @@ public class CardsMainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_stock) {
-            Intent intent = new Intent(CardsMainActivity.this,ServerCardsListActivity.class);
+            Intent intent = new Intent(CardsMainActivity.this, ServerCardsListActivity.class);
             startActivity(intent);
         }
-        if(id == R.id.action_my_cards){
-            Intent intent = new Intent(CardsMainActivity.this,CardsMainActivity.class);
+        if (id == R.id.action_my_cards) {
+            Intent intent = new Intent(CardsMainActivity.this, CardsMainActivity.class);
             startActivity(intent);
         }
 
@@ -358,10 +355,10 @@ public class CardsMainActivity extends AppCompatActivity
     public void deleteCard(final int position) {
         mCard = mCards.get(position);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(CardsMainActivity.this,R.style.MyTheme_Dark_Dialog);
-        builder.setTitle(mCard.getWord()+ " ~ " + CardUI.returnTheme(mCard));
+        AlertDialog.Builder builder = new AlertDialog.Builder(CardsMainActivity.this, R.style.MyTheme_Dark_Dialog);
+        builder.setTitle(mCard.getWord() + " ~ " + CardUI.returnTheme(mCard));
         String dialogMessage = CardUI.dialogMessage(mCard);
-        builder.setMessage(mCard.getTranslate()+ "\n\n" +dialogMessage);
+        builder.setMessage(mCard.getTranslate() + "\n\n" + dialogMessage);
         builder.setPositiveButton(getString(R.string.remove), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -379,8 +376,8 @@ public class CardsMainActivity extends AppCompatActivity
         }).show();
     }
 
-    protected void openDeleteDialog(final int position){
-        AlertDialog.Builder builder = new AlertDialog.Builder(CardsMainActivity.this,R.style.MyTheme_Dark_Dialog);
+    protected void openDeleteDialog(final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CardsMainActivity.this, R.style.MyTheme_Dark_Dialog);
         builder.setMessage("Вы уверены?");
         builder.setPositiveButton(getString(R.string.remove), new DialogInterface.OnClickListener() {
             @Override
@@ -390,10 +387,10 @@ public class CardsMainActivity extends AppCompatActivity
                 mCard = mCards.get(position);
 
                 final String uuidString = mCard.getId();
+                final WebApi webApi = App.getWebApi();
 
-                Retrofit client = CardLab.get(CardsMainActivity.this).getRetfofitClient();
                 mCards.remove(position);
-                UserCardToDeleteAPI serviceUpload = client.create(UserCardToDeleteAPI.class);
+
                 final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
                         (CardsMainActivity.this);
                 String token = prefs.getString("Token", "");
@@ -402,48 +399,47 @@ public class CardsMainActivity extends AppCompatActivity
                     if (token.equals("")) {
                         cardsLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
                                 CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
-                        return;
                     }
                 }
-                        Call<ResponseBody> callPost = serviceUpload.deleteCard(token, mCard);
-                        callPost.enqueue(new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                if (response.isSuccessful()) {
-                                    try {
-                                        String s = response.body().string();
-                                        Log.d(LOG_TAG, "---token " + s);
-                                        if (s.equals("card deleted")||s.equals("no card exists")) {
-                                            cardsLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
-                                                    CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
-                                        }
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                Call<ResponseBody> callPost = webApi.deleteCard(token, mCard);
+                callPost.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                            try {
+                                String s = response.body().string();
+                                Log.d(LOG_TAG, "---token " + s);
+                                if (s.equals("card deleted") || s.equals("no card exists")) {
+                                    cardsLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
+                                            CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
                                 }
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
+                        }
+                    }
 
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-                                String anontoken = prefs.getString("Token", "");
-                                Log.d(LOG_TAG, "---anontoken " + anontoken);
-                                if (anontoken.equals("")) {
-                                    anontoken = prefs.getString("AnonToken", "");
-                                    Log.d(LOG_TAG, "---anontoken " + anontoken);
-                                    if (anontoken.equals("")) {
-                                        cardsLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
-                                                CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
-                                    }
-                                } else {
-                                    Toast.makeText(CardsMainActivity.this, R.string.delete_cancel,
-                                            Toast.LENGTH_SHORT).show();
-                                    mCard = cardsLab.getCard(uuidString);
-                                    mCards.add(mCard);
-                                }
-                                updateUI();
+                        String anontoken = prefs.getString("Token", "");
+                        Log.d(LOG_TAG, "---anontoken " + anontoken);
+                        if (anontoken.equals("")) {
+                            anontoken = prefs.getString("AnonToken", "");
+                            Log.d(LOG_TAG, "---anontoken " + anontoken);
+                            if (anontoken.equals("")) {
+                                cardsLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
+                                        CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
                             }
-                        });
+                        } else {
+                            Toast.makeText(CardsMainActivity.this, R.string.delete_cancel,
+                                    Toast.LENGTH_SHORT).show();
+                            mCard = cardsLab.getCard(uuidString);
+                            mCards.add(mCard);
+                        }
+                        updateUI();
+                    }
+                });
             }
         }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override

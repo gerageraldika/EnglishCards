@@ -19,13 +19,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.carpediemsolution.languagecards.App;
+import com.carpediemsolution.languagecards.api.WebApi;
 import com.carpediemsolution.languagecards.model.Card;
 import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.UIUtils.CardUI;
 import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.model.User;
-import com.carpediemsolution.languagecards.api.UserAPI;
-import com.carpediemsolution.languagecards.api.UserCardsFromServerAPI;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,7 +34,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 /**
  * Created by Юлия on 25.03.2017.
@@ -118,10 +117,13 @@ public class LoginActivity extends Activity {
             final SharedPreferences prefs = PreferenceManager
                     .getDefaultSharedPreferences(LoginActivity.this);
 
-            final Retrofit client = CardLab.get(LoginActivity.this).getRetfofitClient();
-            UserAPI serviceUpload = client.create(UserAPI.class);
-            Call<ResponseBody> callPost = serviceUpload.getUserToken(user);
-             progressBar.setVisibility(View.VISIBLE);
+           // final Retrofit client = CardLab.get(LoginActivity.this).getRetfofitClient();
+           // UserAPI serviceUpload = client.create(UserAPI.class);
+        final WebApi webApi = App.getWebApi();
+           Call<ResponseBody> callPost = webApi.getUserToken(user);
+
+
+            progressBar.setVisibility(View.VISIBLE);
             callPost.enqueue(new Callback<ResponseBody>() {
 
                 @Override
@@ -135,7 +137,7 @@ public class LoginActivity extends Activity {
                             prefs.edit().putString("Token", s).apply();
                             prefs.edit().remove("AnonToken").apply();
                             CardLab.get(LoginActivity.this).addUser(user);
-                            getUsersCards(client, s);}
+                            getUsersCards(s);}
 
                             else if (s == null){Toast.makeText(LoginActivity.this,
                                 R.string.error_user_login,
@@ -160,11 +162,13 @@ public class LoginActivity extends Activity {
             });
     }
 
-    public void getUsersCards(Retrofit client, final String token) {
+    public void getUsersCards(final String token) {
 
         List<Card> anonCards = CardLab.get(LoginActivity.this).getCards();
-        UserCardsFromServerAPI serviceUploadCards = client.create(UserCardsFromServerAPI.class);
-        Call<List<Card>> call = serviceUploadCards.getUserCardsFromServer(token,anonCards);
+
+        final WebApi webApi = App.getWebApi();
+       // UserCardsFromServerAPI serviceUploadCards = client.create(UserCardsFromServerAPI.class);
+        Call<List<Card>> call = webApi.getUserCardsFromServer(token,anonCards);
         progressBar.setVisibility(View.VISIBLE);
         call.enqueue(new Callback<List<Card>>() {
             @Override

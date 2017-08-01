@@ -1,32 +1,34 @@
 package com.carpediemsolution.languagecards;
 
 import android.app.Application;
-import android.content.Context;
-
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
+import com.carpediemsolution.languagecards.api.WebApi;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Юлия on 01.08.2017.
  */
 
 public class App extends Application {
-        private RefWatcher refWatcher;
+
+    private static WebApi webApi;
 
         @Override
         public void onCreate() {
+
         super.onCreate();
+            Retrofit mRetrofit;
+            //initialize retrofit client
+            mRetrofit = new Retrofit.Builder()
+                    .baseUrl("http://cards.carpediemsolutions.ru/")
+                    //.baseUrl("http://192.168.1.52:8081/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return;
-        }
-        refWatcher = LeakCanary.install(this);
+            webApi = mRetrofit.create(WebApi.class);
     }
-
-
-
-    public static RefWatcher getRefWatcher(Context context) {
-        App application = (App) context.getApplicationContext();
-        return application.refWatcher;
+    public static WebApi getWebApi() {
+        return webApi;
     }
 }
+ 

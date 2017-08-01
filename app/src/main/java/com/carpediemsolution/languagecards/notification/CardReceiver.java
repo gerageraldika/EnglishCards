@@ -1,12 +1,9 @@
 package com.carpediemsolution.languagecards.notification;
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-
-
 /**
  * Created by Юлия on 06.04.2017.
  */

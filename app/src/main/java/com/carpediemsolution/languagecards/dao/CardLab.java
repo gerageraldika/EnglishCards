@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 /**
  * Created by Юлия on 21.03.2017.
  */
@@ -81,7 +78,7 @@ public class CardLab {
             cursor.moveToNext();
         }
         cursor.close();
-       // Collections.reverse(cards);
+        // Collections.reverse(cards);
         Collections.shuffle(cards);
         Log.d(LAB_LOG, "---- getCards----" + cards);
         return cards;
@@ -173,14 +170,6 @@ public class CardLab {
                 new String[]{id});
     }
 
-    public Retrofit getRetfofitClient() {
-        Retrofit client = new Retrofit.Builder()
-               .baseUrl("http://cards.carpediemsolutions.ru/")
-                //.baseUrl("http://192.168.1.52:8081/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        return client;
-    }
 
     private static ContentValues getUserContentValues(User user) {
         ContentValues values = new ContentValues();
@@ -221,7 +210,7 @@ public class CardLab {
         }
     }
 
-    public void deleteUser(){
+    public void deleteUser() {
         mDatabase.execSQL("delete from " + CardTable.USER_NAME);
     }
 }
