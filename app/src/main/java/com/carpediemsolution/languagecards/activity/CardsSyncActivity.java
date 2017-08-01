@@ -15,6 +15,8 @@ import com.carpediemsolution.languagecards.api.WebApi;
 import com.carpediemsolution.languagecards.model.Card;
 import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.R;
+import com.carpediemsolution.languagecards.utils.Preferences;
+
 import java.io.IOException;
 import java.util.List;
 import okhttp3.ResponseBody;
@@ -46,7 +48,7 @@ public class CardsSyncActivity extends Activity {
             public void onClick(View v) {
                 SharedPreferences prefs = PreferenceManager
                         .getDefaultSharedPreferences(CardsSyncActivity.this);
-                String token = prefs.getString("Token", "");
+                String token = prefs.getString(Preferences.TOKEN, "");
                 if (token == "") {
                     Toast.makeText(CardsSyncActivity.this, R.string.not_authorized,
                             Toast.LENGTH_SHORT).show();
@@ -70,7 +72,7 @@ public class CardsSyncActivity extends Activity {
         List<Card> userCards = CardLab.get(CardsSyncActivity.this).getCards();
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(CardsSyncActivity.this);
-        String token = prefs.getString("Token", "");
+        String token = prefs.getString(Preferences.TOKEN, "");
 
         final WebApi webApi = App.getWebApi();
         Call<ResponseBody> callPost = webApi.postAllCardsToServer(token, userCards);
@@ -82,7 +84,7 @@ public class CardsSyncActivity extends Activity {
                 if (response.isSuccessful()) {
                     try {
                         String s = response.body().string();
-                        if (s.equals("cards added")) {
+                        if (s.equals(Preferences.CARDS_ADDED)) {
                             Toast.makeText(CardsSyncActivity.this, R.string.sync_ok,
                                     Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(CardsSyncActivity.this, CardsMainActivity.class);

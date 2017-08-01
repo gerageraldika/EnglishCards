@@ -10,14 +10,18 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.carpediemsolution.languagecards.App;
 import com.carpediemsolution.languagecards.api.WebApi;
 import com.carpediemsolution.languagecards.model.Card;
 import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.model.User;
+import com.carpediemsolution.languagecards.utils.Preferences;
+
 import java.io.IOException;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -25,6 +29,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 /**
  * Created by Юлия on 17.04.2017.
  */
@@ -53,7 +58,6 @@ public class AuthorizedPersonActivity extends Activity {
     }
 
     User user = CardLab.get(AuthorizedPersonActivity.this).getUser();
-    private static final String LOG_TAG = "AuthorizedActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,7 @@ public class AuthorizedPersonActivity extends Activity {
         setContentView(R.layout.activity_authorized);
         ButterKnife.bind(this);
 
-        userName.setText("Вы авторизированы в системе, " + user.getUsername());
+        userName.setText(getString(R.string.you_are_authorized) + " " + user.getUsername());
     }
 
     private void sendUserCards() {
@@ -69,7 +73,7 @@ public class AuthorizedPersonActivity extends Activity {
         final SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(AuthorizedPersonActivity.this);
 
-        String token = prefs.getString("Token", "");
+        String token = prefs.getString(Preferences.TOKEN, "");
         List<Card> userCards = CardLab.get(AuthorizedPersonActivity.this).getCards();
 
         final WebApi webApi = App.getWebApi();
@@ -82,8 +86,8 @@ public class AuthorizedPersonActivity extends Activity {
                     progressBar.setVisibility(View.INVISIBLE);
                     try {
                         String s = response.body().string();
-                        if (s.equals("cards added")) {
-                            prefs.edit().remove("Token").apply();
+                        if (s.equals(Preferences.CARDS_ADDED)) {
+                            prefs.edit().remove(Preferences.TOKEN).apply();
                             CardLab.get(AuthorizedPersonActivity.this).deleteAllCards();
                             CardLab.get(AuthorizedPersonActivity.this).deleteUser();
                             Intent intent = new Intent(AuthorizedPersonActivity.this, CardsMainActivity.class);
@@ -98,7 +102,7 @@ public class AuthorizedPersonActivity extends Activity {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
-                userName.setText(user.getUsername() + ", отсутствует соединение с сервером.");
+                userName.setText(user.getUsername() + " " + getString(R.string.no_connection_with_server));
             }
         });
 
@@ -106,9 +110,7 @@ public class AuthorizedPersonActivity extends Activity {
 
     private void toLoginOut() {
         AlertDialog.Builder builder = new AlertDialog.Builder(AuthorizedPersonActivity.this, R.style.MyTheme_Dark_Dialog);
-        builder.setMessage("Внимание! Карточки привязаны к вашей учетной записи." +
-                " Совершая выход из аккаунта, вы теряете возможность" +
-                " просматривать карточки до следующего входа в систему.");
+        builder.setMessage(getString(R.string.log_out_message));
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

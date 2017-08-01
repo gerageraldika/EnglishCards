@@ -33,10 +33,12 @@ import com.carpediemsolution.languagecards.App;
 import com.carpediemsolution.languagecards.api.WebApi;
 import com.carpediemsolution.languagecards.model.Card;
 import com.carpediemsolution.languagecards.dao.CardLab;
-import com.carpediemsolution.languagecards.UIUtils.CardUI;
+import com.carpediemsolution.languagecards.utils.CardUI;
 import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
 import com.carpediemsolution.languagecards.notification.CardReceiver;
+import com.carpediemsolution.languagecards.utils.Preferences;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,11 +61,9 @@ public class CardsMainActivity extends AppCompatActivity
     @BindView(R.id.card_recycler_view)
     RecyclerView cardRecyclerView;
     private CardAdapter mAdapter;
-
     private List<Card> mCards;
     private Card mCard;
     private CardLab cardsLab;
-
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
@@ -80,7 +80,7 @@ public class CardsMainActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(Color.parseColor("#558B2F"));
+        toolbar.setTitleTextColor(Color.parseColor(getString(R.string.color_primary)));
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -137,8 +137,7 @@ public class CardsMainActivity extends AppCompatActivity
 
     private class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private Card mCardItem;
-
-        List<Card> mCardItems = new ArrayList<>();
+        private List<Card> mCardItems = new ArrayList<>();
         private static final int EMPTY_VIEW = 10;
 
         private TextView mWordTextView;
@@ -179,10 +178,10 @@ public class CardsMainActivity extends AppCompatActivity
 
                 if (mWordTextView.getText().equals(mCardItem.getWord())) {
                     mWordTextView.setText(mCardItem.getTranslate());
-                    mWordTextView.setTextColor(Color.parseColor("#558B2F"));
+                    mWordTextView.setTextColor(Color.parseColor(getString(R.string.color_primary)));
                 } else if (mWordTextView.getText().equals(mCardItem.getTranslate())) {
                     mWordTextView.setText(mCardItem.getWord());
-                    mWordTextView.setTextColor(Color.parseColor("#37474F"));
+                    mWordTextView.setTextColor(Color.parseColor(getString(R.string.color_accent)));
                 }
             }
         }
@@ -268,7 +267,7 @@ public class CardsMainActivity extends AppCompatActivity
 
             SharedPreferences prefs = PreferenceManager.
                     getDefaultSharedPreferences(CardsMainActivity.this);
-            String token = prefs.getString("Token", "");
+            String token = prefs.getString(Preferences.TOKEN, "");
             Log.d(LOG_TAG, "---token " + token);
             if (token == "") {
                 Intent intent = new Intent(CardsMainActivity.this, LoginActivity.class);
@@ -378,7 +377,7 @@ public class CardsMainActivity extends AppCompatActivity
 
     protected void openDeleteDialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(CardsMainActivity.this, R.style.MyTheme_Dark_Dialog);
-        builder.setMessage("Вы уверены?");
+        builder.setMessage(getString(R.string.are_you_sure));
         builder.setPositiveButton(getString(R.string.remove), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -393,9 +392,9 @@ public class CardsMainActivity extends AppCompatActivity
 
                 final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
                         (CardsMainActivity.this);
-                String token = prefs.getString("Token", "");
+                String token = prefs.getString(Preferences.TOKEN, "");
                 if (token.equals("")) {
-                    token = prefs.getString("AnonToken", "");
+                    token = prefs.getString(Preferences.ANON_TOKEN, "");
                     if (token.equals("")) {
                         cardsLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
                                 CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
@@ -409,7 +408,7 @@ public class CardsMainActivity extends AppCompatActivity
                             try {
                                 String s = response.body().string();
                                 Log.d(LOG_TAG, "---token " + s);
-                                if (s.equals("card deleted") || s.equals("no card exists")) {
+                                if (s.equals(Preferences.CARD_DELETED) || s.equals(Preferences.NO_CARDS__EXIST)) {
                                     cardsLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
                                             CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
                                 }
@@ -422,10 +421,10 @@ public class CardsMainActivity extends AppCompatActivity
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-                        String anontoken = prefs.getString("Token", "");
+                        String anontoken = prefs.getString(Preferences.TOKEN, "");
                         Log.d(LOG_TAG, "---anontoken " + anontoken);
                         if (anontoken.equals("")) {
-                            anontoken = prefs.getString("AnonToken", "");
+                            anontoken = prefs.getString(Preferences.ANON_TOKEN, "");
                             Log.d(LOG_TAG, "---anontoken " + anontoken);
                             if (anontoken.equals("")) {
                                 cardsLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,

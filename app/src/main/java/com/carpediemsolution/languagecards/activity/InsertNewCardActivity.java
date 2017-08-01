@@ -4,12 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -20,18 +17,26 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import com.carpediemsolution.languagecards.App;
 import com.carpediemsolution.languagecards.api.WebApi;
 import com.carpediemsolution.languagecards.model.Card;
 import com.carpediemsolution.languagecards.dao.CardLab;
-import com.carpediemsolution.languagecards.UIUtils.CardUI;
+import com.carpediemsolution.languagecards.utils.CardUI;
 import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
+import com.carpediemsolution.languagecards.utils.Preferences;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+
 import java.util.Date;
 import java.util.UUID;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,35 +44,59 @@ import retrofit2.Response;
 public class InsertNewCardActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "InsertActivity";
-    private Toolbar toolbarTheme;
-    private EditText editWord;
-    private EditText editTranslate;
-    private EditText editDescription;
     private Card mCard;
     private InterstitialAd interstitial;
+
+    @BindView(R.id.new_card_word)
+    EditText editWord;
+    @BindView(R.id.new_card_translate)
+    EditText editTranslate;
+    @BindView(R.id.new_card_description)
+    EditText editDescription;
+
+    @OnTextChanged(R.id.new_card_word)
+    public void setCardWord(CharSequence s) {
+        mCard.setWord(s.toString());
+    }
+
+    @OnTextChanged(R.id.new_card_translate)
+    public void setCardTranslate(CharSequence s) {
+        mCard.setTranslate(s.toString());
+    }
+
+    @OnTextChanged(R.id.new_card_translate)
+    public void setCardDescription(CharSequence s) {
+        mCard.setDescription(s.toString());
+    }
+
+    @OnClick(R.id.fab_new_card)
+    public void onClick() {
+        if (interstitial.isLoaded()) {
+            interstitial.show();
+        } else {
+            onClickWriteButton();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_new_card);
+        ButterKnife.bind(this);
 
-        toolbarTheme = (Toolbar) findViewById(R.id.toolbar_card_theme);
+        Toolbar toolbarTheme = (Toolbar) findViewById(R.id.toolbar_card_theme);
         setSupportActionBar(toolbarTheme);
 
         mCard = new Card();
         mCard.setId(String.valueOf(UUID.randomUUID()));
         mCard.setPerson_id(0);
 
-        editWord = (EditText) findViewById(R.id.new_card_word);
-        editTranslate = (EditText) findViewById(R.id.new_card_translate);
-        editDescription = (EditText) findViewById(R.id.new_card_description);
-
         editWord.setFilters(CardUI.setSizeForCardEditText());
         editTranslate.setFilters(CardUI.setSizeForCardEditText());
         editDescription.setFilters(CardUI.setSizeForCardDescriptionEditText());
 
         interstitial = new InterstitialAd(this);
-        interstitial.setAdUnitId("cca-app-pub-9016583513972837/6074106306");
+        interstitial.setAdUnitId(getString(R.string.admob_for_insert_activity));
 
         interstitial.setAdListener(new AdListener() {
             @Override
@@ -79,49 +108,6 @@ public class InsertNewCardActivity extends AppCompatActivity {
 
         requestNewInterstitial();
 
-        editWord.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mCard.setWord(s.toString());}
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-
-        editTranslate.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mCard.setTranslate(s.toString());}
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-
-
-        FloatingActionButton fabWriteCard = (FloatingActionButton) findViewById(R.id.fab_new_card);
-
-        editDescription.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mCard.setDescription(s.toString());
-               }
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-
-        fabWriteCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (interstitial.isLoaded()) {
-                    interstitial.show();}
-                else{onClickWriteButton();}
-            }
-        });
-
     }
 
     @Override
@@ -131,55 +117,61 @@ public class InsertNewCardActivity extends AppCompatActivity {
         Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
         spinner.setPopupBackgroundResource(R.color.colorPrimary);
 
-       ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-               R.array.titles_graph_tab, R.layout.spinner_item);
-       adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-       spinner.setAdapter(adapter);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.titles_graph_tab, R.layout.spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                              @Override
-                                              public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                                  String selectedItem = (String) parent.getItemAtPosition(position);
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = (String) parent.getItemAtPosition(position);
 
-                                                  if(selectedItem.equals("Culture and Art")){
-                                                  mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);}
-                                                  if(selectedItem.equals("Modern technologies")){
-                                                      mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);}
-                                                  if(selectedItem.equals("Society and Politics")){
-                                                      mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);}
-                                                  if(selectedItem.equals("Adventure and Travel")){
-                                                      mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);}
-                                                  if(selectedItem.equals("Nature and Weather")){
-                                                      mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);}
-                                                  if(selectedItem.equals("Education and Profession")){
-                                                      mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);}
-                                                  if(selectedItem.equals("Appearance and Character")){
-                                                      mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);}
-                                                  if(selectedItem.equals("Clothes and Fashion")){
-                                                      mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);}
-                                                  if(selectedItem.equals("Sport")){
-                                                      mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_SPORT);}
-                                                  if(selectedItem.equals("Family and Relationship")){
-                                                      mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);}
-                                                  if(selectedItem.equals("The order of the day")){
-                                                      mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);}
-                                                  if(selectedItem.equals("Hobbies and Free time")){
-                                                      mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);}
-                                                  if(selectedItem.equals("Customs and Traditions")){
-                                                      mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);}
-                                                  if(selectedItem.equals("Shopping")){
-                                                      mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_SHOPPING);}
-                                                  if(selectedItem.equals("Food and Drinks")){
-                                                      mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);}
-                                              }
+                switch (selectedItem) {
+                    case (Preferences.CULTURE_ART):
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
+                    case (Preferences.MODERN_TECHNOLOGIES):
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
+                    case (Preferences.SOCIETY_POLITICS):
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
+                    case (Preferences.ADVENTURE_TRAVEL):
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
+                    case (Preferences.NATURE_WEATHER):
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
+                    case (Preferences.EDUCATION_PROFESSION):
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
+                    case (Preferences.APPEARANCE_CHARACTER):
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
+                    case (Preferences.CLOTHES_FASHION):
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
+                    case (Preferences.SPORT):
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_SPORT);
+                    case (Preferences.FAMILY_RELATIONSHIP):
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
+                    case (Preferences.ORDER_OF_DAY):
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
+                    case (Preferences.HOBBIES_FREE_TIME):
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
+                    case (Preferences.CUSTOMS_TRADITIONS):
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
+                    case (Preferences.SHOPPING):
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_SHOPPING);
+                    case (Preferences.FOOD_DRINKS):
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
+                    default:
+                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
+                }
+            }
 
-                                              @Override
-                                              public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-                                              } });
-        return true;}
+            }
+        });
+        return true;
+    }
 
-    protected void onClickWriteButton(){
+    protected void onClickWriteButton() {
         if (mCard.getWord() == null || mCard.getTranslate() == null) {
             Toast toast = Toast.makeText(InsertNewCardActivity.this,
                     getString(R.string.insert_card), Toast.LENGTH_SHORT);
@@ -198,14 +190,14 @@ public class InsertNewCardActivity extends AppCompatActivity {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
                     (InsertNewCardActivity.this);
 
-            String token = prefs.getString("Token", "");
+            String token = prefs.getString(Preferences.TOKEN, "");
 
             if (token.equals("")) {
-                token = prefs.getString("AnonToken", "");
+                token = prefs.getString(Preferences.ANON_TOKEN, "");
 
                 if (token.equals("")) {
-                    token = "anonym " + new Date().toString();
-                    prefs.edit().putString("AnonToken", token).apply();
+                    token = Preferences.ANONUM + new Date().toString();
+                    prefs.edit().putString(Preferences.ANON_TOKEN, token).apply();
                 }
             }
             Log.d(LOG_TAG, "---token " + " -" + token + "- ");
@@ -214,10 +206,13 @@ public class InsertNewCardActivity extends AppCompatActivity {
             callPost.enqueue(new Callback<Card>() {
                 @Override
                 public void onResponse(Call<Card> call, Response<Card> response) {
-                    Log.d(LOG_TAG, "---RESULT OK" + response.body());}
+                    Log.d(LOG_TAG, "---RESULT OK" + response.body());
+                }
+
                 @Override
                 public void onFailure(Call<Card> call, Throwable t) {
-                    Log.d(LOG_TAG, "---RESULT Failed");}
+                    Log.d(LOG_TAG, "---RESULT Failed");
+                }
             });
 
             Intent intent = new Intent(InsertNewCardActivity.this, CardsMainActivity.class);
@@ -229,7 +224,6 @@ public class InsertNewCardActivity extends AppCompatActivity {
     private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice("3EED2099D69A864B")
                 .build();
         interstitial.loadAd(adRequest);
     }

@@ -23,7 +23,7 @@ import com.carpediemsolution.languagecards.App;
 import com.carpediemsolution.languagecards.api.WebApi;
 import com.carpediemsolution.languagecards.model.Card;
 import com.carpediemsolution.languagecards.dao.CardLab;
-import com.carpediemsolution.languagecards.UIUtils.CardUI;
+import com.carpediemsolution.languagecards.utils.CardUI;
 import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.model.User;
 
