@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,6 +18,10 @@ import com.carpediemsolution.languagecards.model.User;
 import com.carpediemsolution.languagecards.api.UserCardsToServerAPI;
 import java.io.IOException;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,11 +35,28 @@ import retrofit2.Retrofit;
 
 public class AuthorizedPersonActivity extends Activity {
 
-    private ProgressBar progressBar;
-    private Button logOutButton;
-    private Button forgetData;
-    private TextView userName;
-    private TextView returnButton;
+    @BindView(R.id.authorized_progress)
+    ProgressBar progressBar;
+    @BindView(R.id.email)
+    TextView userName;
+
+    @OnClick(R.id.log_out_button)
+    public void toLogOut() {
+        toLoginOut();
+    }
+
+    @OnClick(R.id.forget_data)
+    public void goToPasswordSenderActivity() {
+        Intent intent = new Intent(AuthorizedPersonActivity.this, PasswordSenderActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.return_main)
+    public void goToMainActivity() {
+        Intent intent = new Intent(AuthorizedPersonActivity.this, CardsMainActivity.class);
+        startActivity(intent);
+    }
+
     User user = CardLab.get(AuthorizedPersonActivity.this).getUser();
     private static final String LOG_TAG = "AuthorizedActivity";
 
@@ -44,43 +64,9 @@ public class AuthorizedPersonActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authorized);
+        ButterKnife.bind(this);
 
-        progressBar = (ProgressBar) findViewById(R.id.authorized_progress);
-        logOutButton = (Button) findViewById(R.id.log_out_button);
-        logOutButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                toLoginOut();
-            }
-        });
-
-        forgetData = (Button) findViewById(R.id.forget_data);
-        forgetData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AuthorizedPersonActivity.this, PasswordSenderActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        returnButton = (TextView) findViewById(R.id.return_main);
-        returnButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AuthorizedPersonActivity.this, CardsMainActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        userName = (TextView) findViewById(R.id.email);
         userName.setText("Вы авторизированы в системе, " + user.getUsername());
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(AuthorizedPersonActivity.this, CardsMainActivity.class);
-        startActivity(intent);
     }
 
     private void sendUserCards() {
@@ -140,6 +126,12 @@ public class AuthorizedPersonActivity extends Activity {
                 return;
             }
         }).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(AuthorizedPersonActivity.this, CardsMainActivity.class);
+        startActivity(intent);
     }
 }
 
