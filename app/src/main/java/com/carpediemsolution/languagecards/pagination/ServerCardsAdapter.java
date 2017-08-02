@@ -241,7 +241,7 @@ public class ServerCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
         }
         mCard.setId(String.valueOf(UUID.randomUUID()));
-        CardLab CardrLab = CardLab.get(context);
+        CardLab CardrLab = CardLab.get();
         CardrLab.addCard(mCard);
     }
 

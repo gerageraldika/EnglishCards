@@ -135,7 +135,7 @@ public class LoginActivity extends Activity {
                         if (s != null) {
                             prefs.edit().putString(Preferences.TOKEN, s).apply();
                             prefs.edit().remove(Preferences.ANON_TOKEN).apply();
-                            CardLab.get(LoginActivity.this).addUser(user);
+                            CardLab.get().addUser(user);
                             getUsersCards(s);
                         } else if (s == null) {
                             Toast.makeText(LoginActivity.this,
@@ -165,7 +165,7 @@ public class LoginActivity extends Activity {
     }
 
     public void getUsersCards(final String token) {
-        List<Card> anonCards = CardLab.get(LoginActivity.this).getCards();
+        List<Card> anonCards = CardLab.get().getCards();
 
         Call<List<Card>> call = webApi.getUserCardsFromServer(token, anonCards);
         progressBar.setVisibility(View.VISIBLE);
@@ -176,7 +176,7 @@ public class LoginActivity extends Activity {
                 if (response.isSuccessful()) {
                     try {
                         List<Card> cards = response.body();
-                        CardLab.get(LoginActivity.this).addCards(cards);
+                        CardLab.get().addCards(cards);
                         Log.d(LOG_TAG, "---RESULT OK " + cards + " " + token);
                     } catch (Exception e) {
                         e.printStackTrace();

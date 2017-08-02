@@ -57,7 +57,7 @@ public class UserAuthorizedActivity extends Activity {
         startActivity(intent);
     }
 
-    User user = CardLab.get(UserAuthorizedActivity.this).getUser();
+    User user = CardLab.get().getUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +74,7 @@ public class UserAuthorizedActivity extends Activity {
                 .getDefaultSharedPreferences(UserAuthorizedActivity.this);
 
         String token = prefs.getString(Preferences.TOKEN, "");
-        List<Card> userCards = CardLab.get(UserAuthorizedActivity.this).getCards();
+        List<Card> userCards = CardLab.get().getCards();
 
         final WebApi webApi = App.getWebApi();
         Call<ResponseBody> callPost = webApi.postAllCardsToServer(token, userCards);
@@ -88,8 +88,8 @@ public class UserAuthorizedActivity extends Activity {
                         String s = response.body().string();
                         if (s.equals(Preferences.CARDS_ADDED)) {
                             prefs.edit().remove(Preferences.TOKEN).apply();
-                            CardLab.get(UserAuthorizedActivity.this).deleteAllCards();
-                            CardLab.get(UserAuthorizedActivity.this).deleteUser();
+                            CardLab.get().deleteAllCards();
+                            CardLab.get().deleteUser();
                             Intent intent = new Intent(UserAuthorizedActivity.this, UserCardsActivity.class);
                             startActivity(intent);
                         }

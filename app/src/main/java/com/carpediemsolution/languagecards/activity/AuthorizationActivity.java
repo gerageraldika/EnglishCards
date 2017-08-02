@@ -176,7 +176,7 @@ public class AuthorizationActivity extends Activity {
 
                             Log.d(LOG_TAG, "---RESULT OK authorized token returned " + s);
 
-                            CardLab.get(AuthorizationActivity.this).addUser(user);
+                            CardLab.get().addUser(user);
                             String token = prefs.getString(Preferences.TOKEN, "");
                             if (!token.equals("")) {
                                 Toast.makeText(AuthorizationActivity.this, R.string.welcome,

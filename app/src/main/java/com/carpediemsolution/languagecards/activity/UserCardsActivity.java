@@ -107,7 +107,7 @@ public class UserCardsActivity extends AppCompatActivity
             }
         });
 
-        cardsLab = CardLab.get(UserCardsActivity.this);
+        cardsLab = CardLab.get();
         mCards = cardsLab.getCards();
         cardRecyclerView.setLayoutManager(new GridLayoutManager(UserCardsActivity.this, 3));
         updateUI();
@@ -249,26 +249,30 @@ public class UserCardsActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case (R.id.action_stock): {
+
+        switch (item.getItemId()) {
+            case R.id.action_stock: {
                 Intent intent = new Intent(UserCardsActivity.this, ServerCardsActivity.class);
                 startActivity(intent);
+                return  true;
             }
-            case (R.id.action_my_cards): {
+            case R.id.action_my_cards: {
                 Intent intent = new Intent(UserCardsActivity.this, UserCardsActivity.class);
                 startActivity(intent);
+                return  true;
             }
 
-            case (R.id.action_line): {
+            case R.id.action_line: {
                 cardRecyclerView.setLayoutManager(new GridLayoutManager(UserCardsActivity.this, 1));
                 updateUI();
+                return  true;
             }
-            case (R.id.action_frame): {
+            case R.id.action_frame: {
                 cardRecyclerView.setLayoutManager(new GridLayoutManager(UserCardsActivity.this, 3));
                 updateUI();
+                return  true;
             }
-            case (R.id.action_settings): {
+            case R.id.action_settings: {
 
                 SharedPreferences prefs = PreferenceManager.
                         getDefaultSharedPreferences(UserCardsActivity.this);
@@ -281,90 +285,105 @@ public class UserCardsActivity extends AppCompatActivity
                     Intent intent = new Intent(UserCardsActivity.this, UserAuthorizedActivity.class);
                     startActivity(intent);
                 }
-                return true;
+                return  true;
             }
-            case (R.id.action_about_app): {
+            case R.id.action_about_app: {
                 Intent intent = new Intent(UserCardsActivity.this, InformationActivity.class);
                 startActivity(intent);
-                return true;
+                return  true;
             }
-            case (R.id.action_sync_cards): {
+            case R.id.action_sync_cards: {
                 Intent intent = new Intent(UserCardsActivity.this, CardsSyncActivity.class);
                 startActivity(intent);
-                return true;
+                return  true;
             }
+            default: return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        CardLab calcLab = CardLab.get(this);
-        switch (id) {
+        CardLab calcLab = CardLab.get();
+        switch (item.getItemId()) {
             case (R.id.culture_art): {
                 mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
                 updateUI();
+                break;
             }
             case (R.id.modern_technologies): {
                 mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
                 updateUI();
+                break;
             }
             case (R.id.society_politics): {
                 mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
                 updateUI();
+                break;
             }
             case (R.id.adventure_travel): {
                 mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
                 updateUI();
+                break;
             }
             case (R.id.nature_weather): {
                 mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
                 updateUI();
+                break;
             }
             case (R.id.education_profession): {
                 mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
                 updateUI();
+                break;
             }
             case (R.id.appearance_character): {
                 mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
                 updateUI();
+                break;
             }
             case (R.id.clothes_fashion): {
                 mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
                 updateUI();
+                break;
             }
             case (R.id.sport): {
                 mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_SPORT);
                 updateUI();
+                break;
             }
             case (R.id.family_relationship): {
                 mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
                 updateUI();
+                break;
             }
             case (R.id.order_of_day): {
                 mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
                 updateUI();
+                break;
             }
             case (R.id.hobbies_free_time): {
                 mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
                 updateUI();
+                break;
             }
             case (R.id.customs_traditions): {
                 mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
                 updateUI();
+                break;
             }
             case (R.id.shopping): {
                 mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_SHOPPING);
                 updateUI();
+                break;
             }
             case (R.id.food_drinks): {
                 mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
                 updateUI();
+                break;
             }
             case (R.id.all_items): {
                 mCards = calcLab.getCards();
                 updateUI();
+                break;
             }
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

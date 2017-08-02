@@ -1,6 +1,8 @@
 package com.carpediemsolution.languagecards;
 
 import android.app.Application;
+import android.content.Context;
+
 import com.carpediemsolution.languagecards.api.WebApi;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -12,6 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class App extends Application {
 
     private static WebApi webApi;
+    private static Context appContext;
 
         @Override
         public void onCreate() {
@@ -26,9 +29,14 @@ public class App extends Application {
                     .build();
 
             webApi = mRetrofit.create(WebApi.class);
+            appContext = this;
     }
     public static WebApi getWebApi() {
         return webApi;
+    }
+
+    public static Context getAppContext() {
+        return appContext;
     }
 }
  

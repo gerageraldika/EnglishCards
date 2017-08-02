@@ -68,7 +68,7 @@ public class CardService extends IntentService {
 
     public String getNotificationCard(){
 
-        List<Card> notificationCards = CardLab.get(getApplicationContext()).getCards();
+        List<Card> notificationCards = CardLab.get().getCards();
 
         String notificationWords ="";
 

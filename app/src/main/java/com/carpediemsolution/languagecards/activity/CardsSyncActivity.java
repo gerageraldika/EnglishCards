@@ -63,7 +63,7 @@ public class CardsSyncActivity extends Activity {
     }
 
     protected void syncCards() {
-        List<Card> userCards = CardLab.get(CardsSyncActivity.this).getCards();
+        List<Card> userCards = CardLab.get().getCards();
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(CardsSyncActivity.this);
         String token = prefs.getString(Preferences.TOKEN, "");

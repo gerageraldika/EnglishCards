@@ -118,7 +118,7 @@ public class PasswordSenderActivity extends Activity implements View.OnClickList
                         (PasswordSenderActivity.this);
                 String token = prefs.getString(Preferences.TOKEN, "");
                 if (!token.equals("")) {
-                    User user = CardLab.get(PasswordSenderActivity.this).getUser();
+                    User user = CardLab.get().getUser();
                     Toast.makeText(PasswordSenderActivity.this, user.getUsername() + getString(R.string.already_authorized),
                             Toast.LENGTH_SHORT).show();
                 } else {

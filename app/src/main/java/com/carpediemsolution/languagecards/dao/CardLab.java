@@ -1,12 +1,12 @@
 package com.carpediemsolution.languagecards.dao;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
+import com.carpediemsolution.languagecards.App;
 import com.carpediemsolution.languagecards.database.CardBaseHelper;
 import com.carpediemsolution.languagecards.database.CardCursorWrapper;
 import com.carpediemsolution.languagecards.database.CardDBSchema.CardTable;
@@ -25,20 +25,18 @@ public class CardLab {
 
     private static CardLab sCardLab;
 
-    private Context mContext;
     public SQLiteDatabase mDatabase;
     private static String LAB_LOG = "LabLog";
 
-    public static CardLab get(Context context) {
+    public static CardLab get() {
         if (sCardLab == null) {
-            sCardLab = new CardLab(context);
+            sCardLab = new CardLab();
         }
         return sCardLab;
     }
 
-    private CardLab(Context context) {
-        mContext = context.getApplicationContext();
-        mDatabase = new CardBaseHelper(mContext)
+    private CardLab() {
+        mDatabase = new CardBaseHelper(App.getAppContext())
                 .getWritableDatabase();
     }
 

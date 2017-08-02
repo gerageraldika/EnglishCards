@@ -111,7 +111,7 @@ public class EditCardActivity extends AppCompatActivity {
         Toolbar toolbarTheme = (Toolbar) findViewById(R.id.toolbar_card_theme);
         setSupportActionBar(toolbarTheme);
 
-        mCard = CardLab.get(EditCardActivity.this).getCard(id);
+        mCard = CardLab.get().getCard(id);
 
         editWord.setFilters(cardUI.setSizeForCardEditText());
         editTranslate.setFilters(cardUI.setSizeForCardEditText());
@@ -142,36 +142,51 @@ public class EditCardActivity extends AppCompatActivity {
                 switch (selectedItem) {
                     case (Preferences.CULTURE_ART):
                         mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
+                        break;
                     case (Preferences.MODERN_TECHNOLOGIES):
                         mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
+                        break;
                     case (Preferences.SOCIETY_POLITICS):
                         mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
+                        break;
                     case (Preferences.ADVENTURE_TRAVEL):
                         mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
+                        break;
                     case (Preferences.NATURE_WEATHER):
                         mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
+                        break;
                     case (Preferences.EDUCATION_PROFESSION):
                         mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
+                        break;
                     case (Preferences.APPEARANCE_CHARACTER):
                         mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
+                        break;
                     case (Preferences.CLOTHES_FASHION):
                         mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
+                        break;
                     case (Preferences.SPORT):
                         mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_SPORT);
+                        break;
                     case (Preferences.FAMILY_RELATIONSHIP):
                         mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
+                        break;
                     case (Preferences.ORDER_OF_DAY):
                         mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
+                        break;
                     case (Preferences.HOBBIES_FREE_TIME):
                         mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
+                        break;
                     case (Preferences.CUSTOMS_TRADITIONS):
                         mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
+                        break;
                     case (Preferences.SHOPPING):
                         mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_SHOPPING);
+                        break;
                     case (Preferences.FOOD_DRINKS):
                         mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
+                        break;
                     default:
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
+                        break;
                 }
             }
 
@@ -201,7 +216,7 @@ public class EditCardActivity extends AppCompatActivity {
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         } else {
-            CardLab.get(EditCardActivity.this).updateCard(mCard);
+            CardLab.get().updateCard(mCard);
 
             final WebApi webApi = App.getWebApi();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences

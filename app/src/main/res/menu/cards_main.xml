@@ -26,27 +26,27 @@
         android:icon="@drawable/mycards"
         android:orderInCategory="100"
         android:title="My"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_stock"
         android:icon="@drawable/stock"
         android:orderInCategory="100"
         android:title="All"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_frame"
         android:icon="@drawable/ic_action_frame"
         android:orderInCategory="100"
         android:title=""
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_line"
         android:icon="@drawable/line"
         android:orderInCategory="100"
         android:title=""
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 </menu>
 

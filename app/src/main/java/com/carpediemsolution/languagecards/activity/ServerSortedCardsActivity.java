@@ -165,10 +165,12 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
             case (R.id.action_stock): {
                 Intent intent = new Intent(ServerSortedCardsActivity.this, ServerCardsActivity.class);
                 startActivity(intent);
+                return true;
             }
             case (R.id.action_my_cards): {
                 Intent intent = new Intent(ServerSortedCardsActivity.this, UserCardsActivity.class);
                 startActivity(intent);
+                return true;
             }
 
             case (R.id.action_line): {
@@ -177,12 +179,14 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
 
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, returnTheme());
                 Log.d(LOG_TAG, "---theme in scroll " + returnTheme());
+                return true;
             }
             case (R.id.action_frame): {
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, returnTheme());
                 Log.d(LOG_TAG, "---theme in scroll " + returnTheme());
+                return true;
             }
             case (R.id.action_settings): {
                 SharedPreferences prefs = PreferenceManager.
@@ -208,23 +212,17 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 startActivity(intent);
                 return true;
             }
+            default:return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-        //   Intent intent = new Intent(ServerSortedCardsActivity.this, ServerSortedCardsActivity.class);
-        //  Bundle b = new Bundle();
-        int id = item.getItemId();
-        switch (id) {
-
-
+        switch (item.getItemId()) {
             case (R.id.all_items): {
                 Intent intentAllCards = new Intent(ServerSortedCardsActivity.this, ServerCardsActivity.class);
                 startActivity(intentAllCards);
+                break;
             }
             case (R.id.culture_art): {
                 mAdapter.clear();
@@ -232,6 +230,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
+                break;
             }
             case (R.id.modern_technologies): {
                 mAdapter.clear();
@@ -239,6 +238,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
+                break;
             }
             case (R.id.society_politics): {
                 mAdapter.clear();
@@ -246,6 +246,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
+                break;
             }
             case (R.id.adventure_travel): {
                 mAdapter.clear();
@@ -253,7 +254,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
-
+                break;
             }
             case (R.id.nature_weather): {
                 mAdapter.clear();
@@ -261,6 +262,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
+                break;
             }
             case (R.id.education_profession): {
                 mAdapter.clear();
@@ -268,7 +270,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
-
+                break;
             }
             case (R.id.appearance_character): {
                 mAdapter.clear();
@@ -276,7 +278,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
-
+                break;
             }
             case (R.id.clothes_fashion): {
                 mAdapter.clear();
@@ -284,7 +286,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
-
+                break;
             }
             case (R.id.sport): {
                 mAdapter.clear();
@@ -292,7 +294,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_SPORT);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_SPORT);
-
+                break;
             }
             case (R.id.family_relationship): {
                 mAdapter.clear();
@@ -300,6 +302,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
+                break;
             }
             case (R.id.order_of_day): {
                 mAdapter.clear();
@@ -307,7 +310,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
-
+                break;
             }
             case (R.id.hobbies_free_time): {
                 mAdapter.clear();
@@ -315,7 +318,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
-
+                break;
             }
             case (R.id.customs_traditions): {
                 mAdapter.clear();
@@ -323,6 +326,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
+                break;
             }
             case (R.id.shopping): {
                 mAdapter.clear();
@@ -330,6 +334,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_SHOPPING);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_SHOPPING);
+                break;
             }
             case (R.id.food_drinks): {
                 mAdapter.clear();
@@ -337,6 +342,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 mCardRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
                 addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
+                break;
             }
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
