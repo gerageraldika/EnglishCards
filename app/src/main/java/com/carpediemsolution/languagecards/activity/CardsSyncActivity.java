@@ -14,6 +14,7 @@ import com.carpediemsolution.languagecards.api.WebApi;
 import com.carpediemsolution.languagecards.model.Card;
 import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.R;
+import com.carpediemsolution.languagecards.utils.CardUtils;
 import com.carpediemsolution.languagecards.utils.Preferences;
 
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class CardsSyncActivity extends Activity {
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(CardsSyncActivity.this);
         String token = prefs.getString(Preferences.TOKEN, "");
-        if (token.equals("")) {
+        if (CardUtils.isEmptyToken(token)) {
             Toast.makeText(CardsSyncActivity.this, R.string.not_authorized,
                     Toast.LENGTH_SHORT).show();
         } else {

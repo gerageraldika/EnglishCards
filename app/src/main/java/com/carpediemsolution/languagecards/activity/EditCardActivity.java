@@ -26,6 +26,7 @@ import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.utils.CardUI;
 import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
+import com.carpediemsolution.languagecards.utils.CardUtils;
 import com.carpediemsolution.languagecards.utils.Preferences;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -228,10 +229,10 @@ public class EditCardActivity extends AppCompatActivity {
 
             String token = prefs.getString(Preferences.TOKEN, "");
 
-            if (token.equals("")) {
+            if (CardUtils.isEmptyToken(token)) {
                 token = prefs.getString(Preferences.ANON_TOKEN, "");
 
-                if (token.equals("")) {
+                if (CardUtils.isEmptyToken(token)) {
                     token = Preferences.ANONUM + new Date().toString();
                     prefs.edit().putString(Preferences.ANON_TOKEN, token).apply();
                 }

@@ -105,7 +105,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                         cards.addAll(response.body());
                         cardsAdapter.addAll(cards);
                     } catch (NullPointerException e) {
-                        System.out.print("no cards");
+                        Log.d(LOG_TAG, e.toString());
                     }
                 }
                 cardsAdapter.addLoadingFooter();
@@ -344,6 +344,7 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
                 break;
             }
+            default:break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

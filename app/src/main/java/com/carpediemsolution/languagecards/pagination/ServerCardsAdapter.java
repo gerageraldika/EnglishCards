@@ -18,6 +18,7 @@ import com.carpediemsolution.languagecards.model.Card;
 import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.utils.CardUI;
 import com.carpediemsolution.languagecards.R;
+import com.carpediemsolution.languagecards.utils.CardUtils;
 import com.carpediemsolution.languagecards.utils.Preferences;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -177,8 +178,8 @@ public class ServerCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        TextView mWordTextView;
-        ImageView imageView;
+        private TextView mWordTextView;
+        private ImageView imageView;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -233,9 +234,9 @@ public class ServerCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
                 (context);
         String token = prefs.getString(Preferences.TOKEN, "");
-        if (token.equals("")) {
+        if (CardUtils.isEmptyToken(token)) {
             token = prefs.getString(Preferences.ANON_TOKEN, "");
-            if (token.equals("")) {
+            if (CardUtils.isEmptyToken(token)) {
                 token = "anonym " + new Date().toString();
                 prefs.edit().putString(Preferences.ANON_TOKEN, token).apply();
             }

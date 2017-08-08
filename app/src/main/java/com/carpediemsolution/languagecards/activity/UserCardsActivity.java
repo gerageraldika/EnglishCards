@@ -229,7 +229,7 @@ public class UserCardsActivity extends AppCompatActivity
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof CardHolder) {
-                CardHolder vh = (CardHolder) holder;
+               // CardHolder vh = (CardHolder) holder;
                 mCardItem = mCardItems.get(position);
                 Log.d(LOG_TAG, "----" + "onCreateHolder" + mCardItem.getWord());
                 mWordTextView.setText(mCardItem.getWord());
@@ -385,6 +385,7 @@ public class UserCardsActivity extends AppCompatActivity
                 updateUI();
                 break;
             }
+            default:break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -461,12 +462,12 @@ public class UserCardsActivity extends AppCompatActivity
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-                        String anontoken = prefs.getString(Preferences.TOKEN, "");
-                        Log.d(LOG_TAG, "---anontoken " + anontoken);
-                        if (anontoken.equals("")) {
-                            anontoken = prefs.getString(Preferences.ANON_TOKEN, "");
-                            Log.d(LOG_TAG, "---anontoken " + anontoken);
-                            if (anontoken.equals("")) {
+                        String anonToken = prefs.getString(Preferences.TOKEN, "");
+                        Log.d(LOG_TAG, "---anontoken " + anonToken);
+                        if (anonToken.equals("")) {
+                            anonToken = prefs.getString(Preferences.ANON_TOKEN, "");
+                            Log.d(LOG_TAG, "---anontoken " + anonToken);
+                            if (anonToken.equals("")) {
                                 sCardLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
                                         CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
                             }

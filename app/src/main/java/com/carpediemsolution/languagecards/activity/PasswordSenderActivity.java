@@ -21,6 +21,7 @@ import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.utils.CardUI;
 import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.model.User;
+import com.carpediemsolution.languagecards.utils.CardUtils;
 import com.carpediemsolution.languagecards.utils.Preferences;
 
 import java.io.IOException;
@@ -117,7 +118,7 @@ public class PasswordSenderActivity extends Activity implements View.OnClickList
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
                         (PasswordSenderActivity.this);
                 String token = prefs.getString(Preferences.TOKEN, "");
-                if (!token.equals("")) {
+                if (!CardUtils.isEmptyToken(token)) {
                     User user = CardLab.get().getUser();
                     Toast.makeText(PasswordSenderActivity.this, user.getUsername() + getString(R.string.already_authorized),
                             Toast.LENGTH_SHORT).show();
