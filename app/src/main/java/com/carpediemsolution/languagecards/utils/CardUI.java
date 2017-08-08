@@ -14,10 +14,6 @@ import java.util.regex.Pattern;
 
 public class CardUI {
 
-    public CardUI(){
-
-    }
-
     public InputFilter[] setSizeForCardEditText() {
         int maxLength = 40;
         InputFilter[] FilterArray = new InputFilter[1];

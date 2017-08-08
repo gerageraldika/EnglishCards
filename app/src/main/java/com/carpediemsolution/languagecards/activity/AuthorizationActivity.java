@@ -23,10 +23,13 @@ import com.carpediemsolution.languagecards.dao.CardLab;
 import com.carpediemsolution.languagecards.utils.CardUI;
 import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.model.User;
+import com.carpediemsolution.languagecards.utils.CardUtils;
 import com.carpediemsolution.languagecards.utils.Preferences;
 
 import java.io.IOException;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,17 +47,42 @@ public class AuthorizationActivity extends Activity {
     private EditText passwordTextView;
     private TextView userExistsTextView;
     private EditText repeatedPasswordView;
-    private Button loginButton;
     private AutoCompleteTextView userEmailTextView;
-    private String repeatPassword = "1";
     private CardUI cardUI;
     final User user = new User();
     private ProgressBar progressBar;
+
+    @OnClick(R.id.email_sign_in_button)
+    public void onClick() {
+
+        String repeatPassword = repeatedPasswordView.getText().toString();
+        Log.d(LOG_TAG, "---RepeatPassword" + repeatPassword);
+
+        if (TextUtils.isEmpty(usernameTextView.getText())) {
+            usernameTextView.setError(getString(R.string.error_null));
+        } else if (TextUtils.isEmpty(passwordTextView.getText())) {
+            passwordTextView.setError(getString(R.string.error_null));
+        } else if (!cardUI.isEmailValid(user.getEmail())) {
+            userEmailTextView.setError(getString(R.string.invalid_format));
+        } else if (!repeatPassword.equals(user.getPassword())) {
+            passwordTextView.setError("");
+            repeatedPasswordView.setError("");
+            Toast.makeText(AuthorizationActivity.this, getString(R.string.not_equal),
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
+                    (AuthorizationActivity.this);
+            String token = prefs.getString(Preferences.ANON_TOKEN, "");
+            user.setToken(token);
+            toSignUpUser();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        ButterKnife.bind(this);
         cardUI = new CardUI();
         progressBar = (ProgressBar) findViewById(R.id.signup_progress);
 
@@ -126,34 +154,6 @@ public class AuthorizationActivity extends Activity {
         });
 
         userExistsTextView = (TextView) findViewById(R.id.exist_login);
-
-        loginButton = (Button) findViewById(R.id.email_sign_in_button);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                repeatPassword = repeatedPasswordView.getText().toString();
-                Log.d(LOG_TAG, "---RepeatPassword" + repeatPassword);
-
-                if (TextUtils.isEmpty(usernameTextView.getText())) {
-                    usernameTextView.setError(getString(R.string.error_null));
-                } else if (TextUtils.isEmpty(passwordTextView.getText())) {
-                    passwordTextView.setError(getString(R.string.error_null));
-                } else if (!cardUI.isEmailValid(user.getEmail())) {
-                    userEmailTextView.setError(getString(R.string.invalid_format));
-                } else if (!repeatPassword.equals(user.getPassword())) {
-                    passwordTextView.setError("");
-                    repeatedPasswordView.setError("");
-                    Toast.makeText(AuthorizationActivity.this, getString(R.string.not_equal),
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
-                            (AuthorizationActivity.this);
-                    String token = prefs.getString(Preferences.ANON_TOKEN, "");
-                    user.setToken(token);
-                    toSignUpUser();
-                }
-            }
-        });
     }
 
     private void toSignUpUser() {
@@ -178,7 +178,7 @@ public class AuthorizationActivity extends Activity {
 
                             CardLab.get().addUser(user);
                             String token = prefs.getString(Preferences.TOKEN, "");
-                            if (!token.equals("")) {
+                            if (!CardUtils.isEmptyToken(token)) {
                                 Toast.makeText(AuthorizationActivity.this, R.string.welcome,
                                         Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(AuthorizationActivity.this, UserAuthorizedActivity.class);
@@ -194,6 +194,7 @@ public class AuthorizationActivity extends Activity {
 
                 }
             }
+
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
