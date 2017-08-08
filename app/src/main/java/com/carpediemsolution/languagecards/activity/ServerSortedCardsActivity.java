@@ -46,8 +46,8 @@ import retrofit2.Response;
 public class ServerSortedCardsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String LOG_TAG = "ServerListActivity";
     private ProgressBar progressBar;
-    private RecyclerView mCardRecyclerView;
-    private ServerCardsAdapter mAdapter;
+    private RecyclerView cardsRecyclerView;
+    private ServerCardsAdapter cardsAdapter;
     private static final int PAGE_START = 1;
     private boolean isLoading = false;
     private boolean isLastPage = false;
@@ -69,15 +69,15 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
         progressBar = (ProgressBar) findViewById(R.id.server_cards_loading_progress);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(String.valueOf(getString(R.string.color_primary))), PorterDuff.Mode.MULTIPLY);
 
-        mCardRecyclerView = (RecyclerView) findViewById(R.id.card_recycler_view);
+        cardsRecyclerView = (RecyclerView) findViewById(R.id.card_recycler_view);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-        mCardRecyclerView.setLayoutManager(gridLayoutManager);
+        cardsRecyclerView.setLayoutManager(gridLayoutManager);
 
-        mAdapter = new ServerCardsAdapter(this);
-        mCardRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mCardRecyclerView.setAdapter(mAdapter);
+        cardsAdapter = new ServerCardsAdapter(this);
+        cardsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        cardsRecyclerView.setAdapter(cardsAdapter);
 
-        addOnScrollListener(mCardRecyclerView, gridLayoutManager, theme);
+        addOnScrollListener(cardsRecyclerView, gridLayoutManager, theme);
 
         downloadAllCardsFirstTime(theme);
 
@@ -103,12 +103,12 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                     try {
                         List<Card> cards = new ArrayList<>();
                         cards.addAll(response.body());
-                        mAdapter.addAll(cards);
+                        cardsAdapter.addAll(cards);
                     } catch (NullPointerException e) {
                         System.out.print("no cards");
                     }
                 }
-                mAdapter.addLoadingFooter();
+                cardsAdapter.addLoadingFooter();
             }
 
             @Override
@@ -128,18 +128,18 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
             @Override
             public void onResponse(Call<List<Card>> call, Response<List<Card>> response) {
                 progressBar.setVisibility(View.INVISIBLE);
-                mAdapter.removeLoadingFooter();
+                cardsAdapter.removeLoadingFooter();
                 isLoading = false;
                 if (response.isSuccessful()) {
                     try {
                         List<Card> cards = new ArrayList<>();
                         cards.addAll(response.body());
-                        mAdapter.addAll(cards);
+                        cardsAdapter.addAll(cards);
                     } catch (NullPointerException e) {
                         Log.d(LOG_TAG, e.toString());
                     }
                 }
-                mAdapter.addLoadingFooter();
+                cardsAdapter.addLoadingFooter();
             }
 
             @Override
@@ -175,16 +175,16 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
 
             case (R.id.action_line): {
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 1);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
 
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, returnTheme());
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, returnTheme());
                 Log.d(LOG_TAG, "---theme in scroll " + returnTheme());
                 return true;
             }
             case (R.id.action_frame): {
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, returnTheme());
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, returnTheme());
                 Log.d(LOG_TAG, "---theme in scroll " + returnTheme());
                 return true;
             }
@@ -225,123 +225,123 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
                 break;
             }
             case (R.id.culture_art): {
-                mAdapter.clear();
+                cardsAdapter.clear();
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
                 break;
             }
             case (R.id.modern_technologies): {
-                mAdapter.clear();
+                cardsAdapter.clear();
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
                 break;
             }
             case (R.id.society_politics): {
-                mAdapter.clear();
+                cardsAdapter.clear();
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
                 break;
             }
             case (R.id.adventure_travel): {
-                mAdapter.clear();
+                cardsAdapter.clear();
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
                 break;
             }
             case (R.id.nature_weather): {
-                mAdapter.clear();
+                cardsAdapter.clear();
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
                 break;
             }
             case (R.id.education_profession): {
-                mAdapter.clear();
+                cardsAdapter.clear();
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
                 break;
             }
             case (R.id.appearance_character): {
-                mAdapter.clear();
+                cardsAdapter.clear();
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
                 break;
             }
             case (R.id.clothes_fashion): {
-                mAdapter.clear();
+                cardsAdapter.clear();
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
                 break;
             }
             case (R.id.sport): {
-                mAdapter.clear();
+                cardsAdapter.clear();
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_SPORT);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_SPORT);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_SPORT);
                 break;
             }
             case (R.id.family_relationship): {
-                mAdapter.clear();
+                cardsAdapter.clear();
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
                 break;
             }
             case (R.id.order_of_day): {
-                mAdapter.clear();
+                cardsAdapter.clear();
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
                 break;
             }
             case (R.id.hobbies_free_time): {
-                mAdapter.clear();
+                cardsAdapter.clear();
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
                 break;
             }
             case (R.id.customs_traditions): {
-                mAdapter.clear();
+                cardsAdapter.clear();
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
                 break;
             }
             case (R.id.shopping): {
-                mAdapter.clear();
+                cardsAdapter.clear();
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_SHOPPING);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_SHOPPING);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_SHOPPING);
                 break;
             }
             case (R.id.food_drinks): {
-                mAdapter.clear();
+                cardsAdapter.clear();
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(ServerSortedCardsActivity.this, 3);
-                mCardRecyclerView.setLayoutManager(gridLayoutManager);
+                cardsRecyclerView.setLayoutManager(gridLayoutManager);
                 downloadAllCardsFirstTime(CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
-                addOnScrollListener(mCardRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
+                addOnScrollListener(cardsRecyclerView, gridLayoutManager, CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
                 break;
             }
         }

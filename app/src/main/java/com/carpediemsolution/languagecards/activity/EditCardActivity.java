@@ -48,29 +48,30 @@ import retrofit2.Response;
 public class EditCardActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "InsertActivity";
-    private Card mCard;
+    private Card card;
     private InterstitialAd interstitial;
+    private String id;
 
     @BindView(R.id.new_card_word)
-    EditText editWord;
+    EditText wordEditText;
     @BindView(R.id.new_card_translate)
-    EditText editTranslate;
+    EditText translateEditText;
     @BindView(R.id.new_card_description)
-    EditText editDescription;
+    EditText descriptionEditText;
 
     @OnTextChanged(R.id.new_card_word)
     public void setCardWord(CharSequence s) {
-        mCard.setWord(s.toString());
+        card.setWord(s.toString());
     }
 
     @OnTextChanged(R.id.new_card_translate)
     public void setCardTranslate(CharSequence s) {
-        mCard.setTranslate(s.toString());
+        card.setTranslate(s.toString());
     }
 
     @OnTextChanged(R.id.new_card_translate)
     public void setCardDescription(CharSequence s) {
-        mCard.setDescription(s.toString());
+        card.setDescription(s.toString());
     }
 
     @OnClick(R.id.fab_new_card)
@@ -88,11 +89,7 @@ public class EditCardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_insert_new_card);
         ButterKnife.bind(this);
 
-        Bundle bundle = getIntent().getExtras();
-        String id = "";
-        if (bundle != null)
-            id = bundle.getString("card");
-
+        getBundle();
         interstitial = new InterstitialAd(this);
         interstitial.setAdUnitId(getString(R.string.admob));
 
@@ -111,16 +108,23 @@ public class EditCardActivity extends AppCompatActivity {
         Toolbar toolbarTheme = (Toolbar) findViewById(R.id.toolbar_card_theme);
         setSupportActionBar(toolbarTheme);
 
-        mCard = CardLab.get().getCard(id);
+        card = CardLab.get().getCard(id);
 
-        editWord.setFilters(cardUI.setSizeForCardEditText());
-        editTranslate.setFilters(cardUI.setSizeForCardEditText());
-        editDescription.setFilters(cardUI.setSizeForCardDescriptionEditText());
+        wordEditText.setFilters(cardUI.setSizeForCardEditText());
+        translateEditText.setFilters(cardUI.setSizeForCardEditText());
+        descriptionEditText.setFilters(cardUI.setSizeForCardDescriptionEditText());
 
-        editWord.setText(mCard.getWord());
-        editTranslate.setText(mCard.getTranslate());
-        editDescription.setText(mCard.getDescription());
+        wordEditText.setText(card.getWord());
+        translateEditText.setText(card.getTranslate());
+        descriptionEditText.setText(card.getDescription());
+    }
 
+    private void getBundle() {
+        /** Return the intent that started this activity. */
+        Bundle bundle = getIntent().getExtras();
+        if (null != bundle && !bundle.isEmpty()) {
+            id = bundle.getString("card");
+        }
     }
 
     @Override
@@ -141,49 +145,49 @@ public class EditCardActivity extends AppCompatActivity {
                 String selectedItem = (String) parent.getItemAtPosition(position);
                 switch (selectedItem) {
                     case (Preferences.CULTURE_ART):
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
+                        card.setTheme(CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
                         break;
                     case (Preferences.MODERN_TECHNOLOGIES):
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
+                        card.setTheme(CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
                         break;
                     case (Preferences.SOCIETY_POLITICS):
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
+                        card.setTheme(CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
                         break;
                     case (Preferences.ADVENTURE_TRAVEL):
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
+                        card.setTheme(CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
                         break;
                     case (Preferences.NATURE_WEATHER):
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
+                        card.setTheme(CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
                         break;
                     case (Preferences.EDUCATION_PROFESSION):
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
+                        card.setTheme(CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
                         break;
                     case (Preferences.APPEARANCE_CHARACTER):
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
+                        card.setTheme(CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
                         break;
                     case (Preferences.CLOTHES_FASHION):
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
+                        card.setTheme(CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
                         break;
                     case (Preferences.SPORT):
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_SPORT);
+                        card.setTheme(CardDBSchema.CardTable.Themes.THEME_SPORT);
                         break;
                     case (Preferences.FAMILY_RELATIONSHIP):
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
+                        card.setTheme(CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
                         break;
                     case (Preferences.ORDER_OF_DAY):
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
+                        card.setTheme(CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
                         break;
                     case (Preferences.HOBBIES_FREE_TIME):
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
+                        card.setTheme(CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
                         break;
                     case (Preferences.CUSTOMS_TRADITIONS):
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
+                        card.setTheme(CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
                         break;
                     case (Preferences.SHOPPING):
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_SHOPPING);
+                        card.setTheme(CardDBSchema.CardTable.Themes.THEME_SHOPPING);
                         break;
                     case (Preferences.FOOD_DRINKS):
-                        mCard.setTheme(CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
+                        card.setTheme(CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
                         break;
                     default:
                         break;
@@ -205,18 +209,18 @@ public class EditCardActivity extends AppCompatActivity {
     }
 
     protected void onClickWriteButton() {
-        if (mCard.getWord() == null || mCard.getTranslate() == null) {
+        if (card.getWord() == null || card.getTranslate() == null) {
             Toast toast = Toast.makeText(EditCardActivity.this,
                     getString(R.string.insert_card), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
-        } else if (mCard.getTheme() == null) {
+        } else if (card.getTheme() == null) {
             Toast toast = Toast.makeText(EditCardActivity.this,
                     getString(R.string.insert_theme), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         } else {
-            CardLab.get().updateCard(mCard);
+            CardLab.get().updateCard(card);
 
             final WebApi webApi = App.getWebApi();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
@@ -234,7 +238,7 @@ public class EditCardActivity extends AppCompatActivity {
             }
             Log.d(LOG_TAG, "---token " + token);
 
-            Call<Card> callPost = webApi.updateCards(token, mCard);
+            Call<Card> callPost = webApi.updateCards(token, card);
             callPost.enqueue(new Callback<Card>() {
                 @Override
                 public void onResponse(Call<Card> call, Response<Card> response) {

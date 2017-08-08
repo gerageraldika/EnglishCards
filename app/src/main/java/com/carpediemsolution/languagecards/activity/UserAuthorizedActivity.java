@@ -38,7 +38,7 @@ public class UserAuthorizedActivity extends Activity {
     @BindView(R.id.authorized_progress)
     ProgressBar progressBar;
     @BindView(R.id.email)
-    TextView userName;
+    TextView userNameTextView;
 
     @OnClick(R.id.log_out_button)
     public void toLogOut() {
@@ -65,7 +65,7 @@ public class UserAuthorizedActivity extends Activity {
         setContentView(R.layout.activity_authorized);
         ButterKnife.bind(this);
 
-        userName.setText(getString(R.string.you_are_authorized) + " " + user.getUsername());
+        userNameTextView.setText(getString(R.string.you_are_authorized) + " " + user.getUsername());
     }
 
     private void sendUserCards() {
@@ -102,7 +102,7 @@ public class UserAuthorizedActivity extends Activity {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 progressBar.setVisibility(View.INVISIBLE);
-                userName.setText(user.getUsername() + " " + getString(R.string.no_connection_with_server));
+                userNameTextView.setText(user.getUsername() + " " + getString(R.string.no_connection_with_server));
             }
         });
 

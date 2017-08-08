@@ -62,10 +62,10 @@ public class UserCardsActivity extends AppCompatActivity
 
     @BindView(R.id.card_recycler_view)
     RecyclerView cardRecyclerView;
-    private CardAdapter mAdapter;
-    private List<Card> mCards;
-    private Card mCard;
-    private CardLab cardsLab;
+    private CardAdapter cardsAdapter;
+    private List<Card> cards;
+    private Card card;
+    CardLab sCardLab;
     private CardUI cardUI;
     @BindView(R.id.fab)
     FloatingActionButton fab;
@@ -107,8 +107,8 @@ public class UserCardsActivity extends AppCompatActivity
             }
         });
 
-        cardsLab = CardLab.get();
-        mCards = cardsLab.getCards();
+        sCardLab = CardLab.get();
+        cards = sCardLab.getCards();
         cardRecyclerView.setLayoutManager(new GridLayoutManager(UserCardsActivity.this, 3));
         updateUI();
 
@@ -118,10 +118,10 @@ public class UserCardsActivity extends AppCompatActivity
     }
 
     private void updateUI() {
-        mAdapter = new CardAdapter();
-        cardRecyclerView.setAdapter(mAdapter);
-        mAdapter.setCards(mCards);
-        mAdapter.notifyDataSetChanged();
+        cardsAdapter = new CardAdapter();
+        cardRecyclerView.setAdapter(cardsAdapter);
+        cardsAdapter.setCards(cards);
+        cardsAdapter.notifyDataSetChanged();
     }
 
    /* @Override
@@ -306,82 +306,82 @@ public class UserCardsActivity extends AppCompatActivity
         CardLab calcLab = CardLab.get();
         switch (item.getItemId()) {
             case (R.id.culture_art): {
-                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
+                cards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_CULTURE_ART);
                 updateUI();
                 break;
             }
             case (R.id.modern_technologies): {
-                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
+                cards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_MODERN_TECHNOLOGIES);
                 updateUI();
                 break;
             }
             case (R.id.society_politics): {
-                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
+                cards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_SOCIETY_POLITICS);
                 updateUI();
                 break;
             }
             case (R.id.adventure_travel): {
-                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
+                cards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_ADVENTURE_TRAVEL);
                 updateUI();
                 break;
             }
             case (R.id.nature_weather): {
-                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
+                cards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_NATURE_WEATHER);
                 updateUI();
                 break;
             }
             case (R.id.education_profession): {
-                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
+                cards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_EDUCATION_PROFESSION);
                 updateUI();
                 break;
             }
             case (R.id.appearance_character): {
-                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
+                cards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_APPEARANCE_CHARACTER);
                 updateUI();
                 break;
             }
             case (R.id.clothes_fashion): {
-                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
+                cards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_CLOTHES_FASHION);
                 updateUI();
                 break;
             }
             case (R.id.sport): {
-                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_SPORT);
+                cards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_SPORT);
                 updateUI();
                 break;
             }
             case (R.id.family_relationship): {
-                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
+                cards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_FAMILY_RELATIONSHIP);
                 updateUI();
                 break;
             }
             case (R.id.order_of_day): {
-                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
+                cards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_THE_ORDER_OF_DAY);
                 updateUI();
                 break;
             }
             case (R.id.hobbies_free_time): {
-                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
+                cards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_HOBBIES_FREE_TIME);
                 updateUI();
                 break;
             }
             case (R.id.customs_traditions): {
-                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
+                cards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_CUSTOMS_TRADITIONS);
                 updateUI();
                 break;
             }
             case (R.id.shopping): {
-                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_SHOPPING);
+                cards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_SHOPPING);
                 updateUI();
                 break;
             }
             case (R.id.food_drinks): {
-                mCards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
+                cards = calcLab.getCardsByTheme(CardDBSchema.CardTable.Themes.THEME_FOOD_DRINKS);
                 updateUI();
                 break;
             }
             case (R.id.all_items): {
-                mCards = calcLab.getCards();
+                cards = calcLab.getCards();
                 updateUI();
                 break;
             }
@@ -392,12 +392,12 @@ public class UserCardsActivity extends AppCompatActivity
     }
 
     public void deleteCard(final int position) {
-        mCard = mCards.get(position);
+        card = cards.get(position);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(UserCardsActivity.this, R.style.MyTheme_Dark_Dialog);
-        builder.setTitle(mCard.getWord() + " ~ " + cardUI.returnTheme(mCard));
-        String dialogMessage = cardUI.dialogMessage(mCard);
-        builder.setMessage(mCard.getTranslate() + "\n\n" + dialogMessage);
+        builder.setTitle(card.getWord() + " ~ " + cardUI.returnTheme(card));
+        String dialogMessage = cardUI.dialogMessage(card);
+        builder.setMessage(card.getTranslate() + "\n\n" + dialogMessage);
         builder.setPositiveButton(getString(R.string.remove), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -408,7 +408,7 @@ public class UserCardsActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(UserCardsActivity.this, EditCardActivity.class);
                 Bundle b = new Bundle();
-                b.putString("card", mCard.getId()); //Your id
+                b.putString("card", card.getId()); //Your id
                 intent.putExtras(b);
                 startActivity(intent);
             }
@@ -422,13 +422,13 @@ public class UserCardsActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                mAdapter.notifyItemRemoved(position);//item removed from recylcerview
-                mCard = mCards.get(position);
+                cardsAdapter.notifyItemRemoved(position);//item removed from recylcerview
+                card = cards.get(position);
 
-                final String uuidString = mCard.getId();
+                final String uuidString = card.getId();
                 final WebApi webApi = App.getWebApi();
 
-                mCards.remove(position);
+                cards.remove(position);
 
                 final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
                         (UserCardsActivity.this);
@@ -436,11 +436,11 @@ public class UserCardsActivity extends AppCompatActivity
                 if (token.equals("")) {
                     token = prefs.getString(Preferences.ANON_TOKEN, "");
                     if (token.equals("")) {
-                        cardsLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
+                        sCardLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
                                 CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
                     }
                 }
-                Call<ResponseBody> callPost = webApi.deleteCard(token, mCard);
+                Call<ResponseBody> callPost = webApi.deleteCard(token, card);
                 callPost.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -449,7 +449,7 @@ public class UserCardsActivity extends AppCompatActivity
                                 String s = response.body().string();
                                 Log.d(LOG_TAG, "---token " + s);
                                 if (s.equals(Preferences.CARD_DELETED) || s.equals(Preferences.NO_CARDS__EXIST)) {
-                                    cardsLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
+                                    sCardLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
                                             CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
                                 }
                             } catch (IOException e) {
@@ -467,14 +467,14 @@ public class UserCardsActivity extends AppCompatActivity
                             anontoken = prefs.getString(Preferences.ANON_TOKEN, "");
                             Log.d(LOG_TAG, "---anontoken " + anontoken);
                             if (anontoken.equals("")) {
-                                cardsLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
+                                sCardLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
                                         CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
                             }
                         } else {
                             Toast.makeText(UserCardsActivity.this, R.string.delete_cancel,
                                     Toast.LENGTH_SHORT).show();
-                            mCard = cardsLab.getCard(uuidString);
-                            mCards.add(mCard);
+                            card = sCardLab.getCard(uuidString);
+                            cards.add(card);
                         }
                         updateUI();
                     }
