@@ -11,7 +11,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -49,7 +48,7 @@ public class AuthorizationActivity extends Activity {
     private EditText repeatedPasswordView;
     private AutoCompleteTextView userEmailTextView;
     private CardUI cardUI;
-    final User user = new User();
+    private User user = new User();
     private ProgressBar progressBar;
 
     @OnClick(R.id.email_sign_in_button)

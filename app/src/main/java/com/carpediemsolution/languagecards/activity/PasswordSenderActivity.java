@@ -128,6 +128,7 @@ public class PasswordSenderActivity extends Activity implements View.OnClickList
                 }
                 break;
             }
+            default:break;
         }
     }
 

@@ -7,6 +7,6 @@ package com.carpediemsolution.languagecards.utils;
 public class CardUtils {
 
     public static boolean isEmptyToken(String token) {
-        return token.equals(""); // should be "".equals(token)
+        return "".equals(token);
     }
 }

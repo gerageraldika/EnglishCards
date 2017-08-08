@@ -40,6 +40,8 @@ public class UserAuthorizedActivity extends Activity {
     @BindView(R.id.email)
     TextView userNameTextView;
 
+    private User user = CardLab.get().getUser();
+
     @OnClick(R.id.log_out_button)
     public void toLogOut() {
         toLoginOut();
@@ -56,8 +58,6 @@ public class UserAuthorizedActivity extends Activity {
         Intent intent = new Intent(UserAuthorizedActivity.this, UserCardsActivity.class);
         startActivity(intent);
     }
-
-    User user = CardLab.get().getUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

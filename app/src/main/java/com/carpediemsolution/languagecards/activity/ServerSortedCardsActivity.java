@@ -31,6 +31,8 @@ import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
 import com.carpediemsolution.languagecards.pagination.PaginationScrollListener;
 import com.carpediemsolution.languagecards.pagination.ServerCardsAdapter;
+import com.carpediemsolution.languagecards.utils.CardUtils;
+import com.carpediemsolution.languagecards.utils.Preferences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -191,9 +193,9 @@ public class ServerSortedCardsActivity extends AppCompatActivity implements Navi
             case (R.id.action_settings): {
                 SharedPreferences prefs = PreferenceManager.
                         getDefaultSharedPreferences(ServerSortedCardsActivity.this);
-                String token = prefs.getString("Token", "");
+                String token = prefs.getString(Preferences.TOKEN, "");
                 Log.d(LOG_TAG, "---token " + token);
-                if (token.equals("")) {
+                if (CardUtils.isEmptyToken(token)) {
                     Intent intent = new Intent(ServerSortedCardsActivity.this, LoginActivity.class);
                     startActivity(intent);
                 } else {

@@ -46,7 +46,6 @@ public class InsertNewCardActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "InsertActivity";
     private Card card;
-    private CardUI cardUI;
     private InterstitialAd interstitial;
 
     @BindView(R.id.new_card_word)
@@ -90,7 +89,7 @@ public class InsertNewCardActivity extends AppCompatActivity {
         setSupportActionBar(toolbarTheme);
 
         card = new Card();
-        cardUI = new CardUI();
+        CardUI cardUI = new CardUI();
         card.setId(String.valueOf(UUID.randomUUID()));
         card.setPerson_id(0);
 

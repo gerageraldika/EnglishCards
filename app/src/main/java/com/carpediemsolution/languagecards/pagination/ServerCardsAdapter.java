@@ -63,6 +63,7 @@ public class ServerCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 View v2 = inflater.inflate(R.layout.item_progress, parent, false);
                 viewHolder = new LoadingVH(v2);
                 break;
+            default:break;
         }
         return viewHolder;
     }
@@ -106,6 +107,7 @@ public class ServerCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 break;
             case LOADING:
                 break;
+            default:break;
         }
     }
 

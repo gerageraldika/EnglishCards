@@ -38,6 +38,7 @@ import com.carpediemsolution.languagecards.utils.CardUI;
 import com.carpediemsolution.languagecards.R;
 import com.carpediemsolution.languagecards.database.CardDBSchema;
 import com.carpediemsolution.languagecards.notification.CardReceiver;
+import com.carpediemsolution.languagecards.utils.CardUtils;
 import com.carpediemsolution.languagecards.utils.Preferences;
 
 import java.io.IOException;
@@ -65,7 +66,7 @@ public class UserCardsActivity extends AppCompatActivity
     private CardAdapter cardsAdapter;
     private List<Card> cards;
     private Card card;
-    CardLab sCardLab;
+    private CardLab sCardLab;
     private CardUI cardUI;
     @BindView(R.id.fab)
     FloatingActionButton fab;
@@ -233,13 +234,11 @@ public class UserCardsActivity extends AppCompatActivity
                 mCardItem = mCardItems.get(position);
                 Log.d(LOG_TAG, "----" + "onCreateHolder" + mCardItem.getWord());
                 mWordTextView.setText(mCardItem.getWord());
-                if (mCardItem.getDescription() != null) {
-                    if (!mCardItem.getDescription().equals(""))
+                if (mCardItem.getDescription() != null && !mCardItem.getDescription().equals(""))
                         imageView.setImageResource(R.drawable.ic_action_description);
                 }
             }
         }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -278,7 +277,7 @@ public class UserCardsActivity extends AppCompatActivity
                         getDefaultSharedPreferences(UserCardsActivity.this);
                 String token = prefs.getString(Preferences.TOKEN, "");
                 Log.d(LOG_TAG, "---token " + token);
-                if (token.equals("")) {
+                if (CardUtils.isEmptyToken(token)) {
                     Intent intent = new Intent(UserCardsActivity.this, LoginActivity.class);
                     startActivity(intent);
                 } else {
@@ -434,9 +433,9 @@ public class UserCardsActivity extends AppCompatActivity
                 final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
                         (UserCardsActivity.this);
                 String token = prefs.getString(Preferences.TOKEN, "");
-                if (token.equals("")) {
+                if (CardUtils.isEmptyToken(token)) {
                     token = prefs.getString(Preferences.ANON_TOKEN, "");
-                    if (token.equals("")) {
+                    if (CardUtils.isEmptyToken(token)) {
                         sCardLab.mDatabase.delete(CardDBSchema.CardTable.NAME_ENRUS,
                                 CardDBSchema.CardTable.Cols.UUID_ID + " = '" + uuidString + "'", null);
                     }

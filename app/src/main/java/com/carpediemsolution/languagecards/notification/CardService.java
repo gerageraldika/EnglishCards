@@ -26,8 +26,6 @@ public class CardService extends IntentService {
 
     private static final int NOTIFICATION_ID = 1;
     private static final String TAG = "CardService";
-    private NotificationManager notificationManager;
-    private PendingIntent pendingIntent;
 
     public CardService() {
         super("AlarmService");
@@ -43,9 +41,9 @@ public class CardService extends IntentService {
 
         Log.i(TAG,"Alarm Service has started.");
         Context context = this.getApplicationContext();
-        notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent mIntent = new Intent(this, UserCardsActivity.class);
-        pendingIntent = PendingIntent.getActivity(context, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Resources res = this.getResources();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);

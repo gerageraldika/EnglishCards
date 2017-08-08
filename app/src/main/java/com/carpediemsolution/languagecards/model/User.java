@@ -8,7 +8,7 @@ public class User {
 
     private String username;
     private String password;
-    private int person_id;
+    private int personId;
     private String email;
     private String token;
 
@@ -29,12 +29,12 @@ public class User {
     }
 
 
-    public int getPerson_id() {
-        return person_id;
+    public int getPersonId() {
+        return personId;
     }
 
-    public void setPerson_id(int person_id) {
-        this.person_id = person_id;
+    public void setPersonId(int personId) {
+        this.personId = personId;
     }
 
     public String getToken() {return token;}
