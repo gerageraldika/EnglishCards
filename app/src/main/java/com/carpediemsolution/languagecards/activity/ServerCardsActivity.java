@@ -364,5 +364,7 @@ public class ServerCardsActivity extends AppCompatActivity implements Navigation
             finish();
         }
     }
+
+
 }
 

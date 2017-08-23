@@ -56,28 +56,16 @@ public class CardLab {
     }
 
     public List<Card> getCards() {
-        Cursor cursor1 = mDatabase.query(
-                CardTable.NAME_ENRUS,
-                null, // Columns - null selects all columns
-                null,
-                null,
-                null, // groupBy
-                null, // having
-                null  // orderBy
-        );
-
         List<Card> cards = new ArrayList<>();
 
-        CardCursorWrapper cursor = new CardCursorWrapper(cursor1);
+        CardCursorWrapper cursor = queryCard(null,null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             cards.add(cursor.getCard());
             cursor.moveToNext();
         }
-        cursor.close();
-        cursor1.close();
-        // Collections.reverse(cards);
         Collections.shuffle(cards);
+        cursor.close();
         Log.d(LAB_LOG, "---- getCards----" + cards);
         return cards;
     }
@@ -129,7 +117,7 @@ public class CardLab {
             cursor.moveToFirst();
             return cursor.getCard();
         } finally {
-            cursor.close();
+
         }
     }
 
@@ -155,7 +143,6 @@ public class CardLab {
                 null, // having
                 null  // orderBy
         );
-        cursor.close();
         return new CardCursorWrapper(cursor);
     }
 

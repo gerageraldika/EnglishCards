@@ -24,7 +24,7 @@ public class App extends Application {
             //initialize retrofit client
             mRetrofit = new Retrofit.Builder()
                     .baseUrl("http://cards.carpediemsolutions.ru/")
-                    //.baseUrl("http://192.168.1.52:8081/")
+                    //.baseUrl("http://,,")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 

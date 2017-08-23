@@ -207,6 +207,7 @@ public class InsertNewCardActivity extends AppCompatActivity {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
                     (InsertNewCardActivity.this);
 
+            //insertToken
             String token = prefs.getString(Preferences.TOKEN, "");
 
             if (CardUtils.isEmptyToken(token)) {
@@ -217,6 +218,8 @@ public class InsertNewCardActivity extends AppCompatActivity {
                     prefs.edit().putString(Preferences.ANON_TOKEN, token).apply();
                 }
             }
+            //
+
             Log.d(LOG_TAG, "---token " + " -" + token + "- ");
 
             Call<Card> callPost = webApi.uploadCards(token, card);

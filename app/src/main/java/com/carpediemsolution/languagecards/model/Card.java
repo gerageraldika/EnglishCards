@@ -80,5 +80,30 @@ public class Card {
         this.description = description;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Card)) return false;
 
+        Card card = (Card) o;
+
+        if (getPerson_id() != card.getPerson_id()) return false;
+        if (!getId().equals(card.getId())) return false;
+        if (!getTheme().equals(card.getTheme())) return false;
+        if (!getTranslate().equals(card.getTranslate())) return false;
+        if (!getWord().equals(card.getWord())) return false;
+
+        return getDescription().equals(card.getDescription());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId().hashCode();
+        result = 31 * result + getPerson_id();
+        result = 31 * result + getTheme().hashCode();
+        result = 31 * result + getTranslate().hashCode();
+        result = 31 * result + getWord().hashCode();
+        result = 31 * result + getDescription().hashCode();
+        return result;
+    }
 }

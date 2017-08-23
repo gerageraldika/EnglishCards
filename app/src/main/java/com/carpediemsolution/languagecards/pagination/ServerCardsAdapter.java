@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +80,7 @@ public class ServerCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         View v1 = inflater.inflate(R.layout.recycler_view_item, parent, false);
         viewHolder = new ViewHolder(v1) {
         };
+       // Log.d("viewHolder", viewHolder.toString());
         return viewHolder;
     }
 
@@ -158,6 +160,7 @@ public class ServerCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void addLoadingFooter() {
         isLoadingAdded = true;
         add(new Card());
+
     }
 
     public void removeLoadingFooter() {
